@@ -1,0 +1,85 @@
+package edu.emory.bmi.aiw.i2b2export.comm;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+/*
+ * #%L
+ * i2b2 Export Service
+ * %%
+ * Copyright (C) 2013 Emory University
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+
+/**
+ * A bean to communicate configuration load requests from the client. It will generally populated from a JSON object.
+ * Encapsulates the i2b2 authentication metadata and the output configuration ID required to complete the request.
+ *
+ * @author Michel Mansour
+ * @since 1.0
+ */
+public class SendPatientSetRequest {
+
+	/*
+	 * i2b2 authentication metadata of the user making the request
+	 */
+	private I2b2AuthMetadata authMetadata;
+
+	/*
+	 * ID of the configuration to load
+	 */
+	private Long queryMasterId;
+
+	/**
+	 * Gets the i2b2 authentication metadata of the user making the request.
+	 *
+	 * @return {@link I2b2AuthMetadata} object containing the metadata of the user making the request
+	 */
+	public I2b2AuthMetadata getAuthMetadata() {
+		return authMetadata;
+	}
+
+	/**
+	 * Sets the i2b2 authentication metadata of the user making the request.
+	 *
+	 * @param authMetadata contains the i2b2 authentication metadata of the user making the request
+	 */
+	public void setAuthMetadata(I2b2AuthMetadata authMetadata) {
+		this.authMetadata = authMetadata;
+	}
+
+	/**
+	 * Gets the ID of the output configuration to load.
+	 *
+	 * @return the output configuration ID to load as a {@link Long}
+	 */
+	public Long getQueryMasterId() {
+		return queryMasterId;
+	}
+
+	/**
+	 * Sets the ID of the output configuration to load.
+	 *
+	 * @param queryMasterId the ID of the output configuration to load
+	 */
+	public void setQueryMasterId(Long queryMasterId) {
+		this.queryMasterId = queryMasterId;
+	}
+
+	@Override
+	public String toString() {
+		return ToStringBuilder.reflectionToString(this);
+	}
+	
+}

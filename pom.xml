@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.eurekaclinical</groupId>
+	<artifactId>i2b2-eureka</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>i2b2 Eureka Integration</name>
+	<description>Server and web client plugins for calling Eureka web services from the i2b2 web client.</description>
+	<inceptionYear>2015</inceptionYear>
+	<organization>
+		<name>Emory University</name>
+		<url>http://www.emory.edu</url>
+	</organization>
+
+	<modules>
+		<module>i2b2-eureka-service</module>
+                <module>i2b2-send-patient-set-plugin</module>
+                <module>i2b2-eureka-package</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<scm>
+		<developerConnection>scm:git:ssh://git.cci.emory.edu:/opt/git/aiw/i2b2-eureka.git</developerConnection>
+		<url>ssh://git.cci.emory.edu:/opt/git/aiw/i2b2-eureka.git</url>
+	  <tag>HEAD</tag>
+  </scm>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>http://jira.cci.emory.edu:8080/jira/secure/Dashboard.jspa</url>
+	</issueManagement>
+
+	<distributionManagement>
+		<site>
+			<id>aiw.sourceforge.net</id>
+			<url>scp://shell.sourceforge.net/home/project-web/aiw/htdocs/dev/i2b2-eureka-${project.version}</url>
+		</site>
+		<repository>
+			<id>aiw</id>
+			<name>AIW Repo</name>
+			<url>http://maven.cci.emory.edu/nexus/content/repositories/aiw/</url>
+		</repository>
+		<snapshotRepository>
+			<id>aiw-snapshots</id>
+			<name>AIW Snapshots Repo</name>
+			<url>http://maven.cci.emory.edu/nexus/content/repositories/aiw-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.3</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>2.5</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+			<distribution>manual</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>arpost</id>
+			<name>Andrew Post</name>
+			<email>arpost@emory.edu</email>
+			<roles>
+				<role>Faculty Project Lead</role>
+			</roles>
+			<organization>Department of Biomedical Informatics, Emory University</organization>
+		</developer>
+		<developer>
+			<id>mmansour</id>
+			<name>Michel Mansour</name>
+			<email>michel.mansour@emory.edu</email>
+			<roles>
+				<role>Software Developer</role>
+			</roles>
+			<organization>Department of Biomedical Informatics, Emory University
+			</organization>
+		</developer>
+	</developers>
+</project>
