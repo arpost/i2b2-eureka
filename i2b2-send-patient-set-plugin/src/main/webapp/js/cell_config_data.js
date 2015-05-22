@@ -20,7 +20,7 @@
 			standardTabs: true, // this means the plugin uses standard tabs at top
 			html: {
 				source: 'injected_screens.html',
-				mainDivId: 'PatientSetSender-mainDiv'
+				mainDivId: 'Dem1Set-mainDiv'
 			}
 		}
 	}
