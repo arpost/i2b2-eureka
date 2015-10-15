@@ -32,7 +32,7 @@ public class I2b2EurekaServicesProperties extends AbstractProperties {
 	
 	@Override
 	public String getProxyCallbackServer() {
-		return this.getValue("i2b2eureka.services.callbackserver");
+		return this.getValue("i2b2eureka.services.callbackserver", "https://localhost:8443");
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class I2b2EurekaServicesProperties extends AbstractProperties {
 	 * @return the URL as a String
 	 */
 	public String getProxyUrl() {
-		return this.getValue("i2b2eureka.proxyUrl");
+		return this.getValue("i2b2eureka.proxyUrl", "https://localhost/i2b2/index.php");
 	}
 
 	/**
@@ -50,15 +50,15 @@ public class I2b2EurekaServicesProperties extends AbstractProperties {
 	 * @return the URL as a String
 	 */
 	public String getI2b2ServiceHostUrl() {
-		return this.getValue("i2b2eureka.serviceHostUrl");
+		return this.getValue("i2b2eureka.serviceHostUrl", "http://localhost:9090");
 	}
 	
 	public String getServiceUrl() {
-		return this.getValue("eureka.services.url");
+		return this.getValue("eureka.services.url", "https://localhost/eureka-services");
 	}
 	
 	public String getSourceConfigId() {
-		return this.getValue("i2b2eureka.sourceConfigId");
+		return this.getValue("i2b2eureka.sourceConfigId", "i2b2 Eureka Service");
 	}
 	
 }
