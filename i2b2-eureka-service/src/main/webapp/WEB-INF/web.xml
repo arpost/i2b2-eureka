@@ -25,6 +25,9 @@
     <listener>
         <listener-class>edu.emory.bmi.aiw.i2b2export.config.GuiceConfig</listener-class>
     </listener>
+	<listener>
+		<listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+	</listener>
     <filter>
         <filter-name>Guice Filter</filter-name>
         <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
