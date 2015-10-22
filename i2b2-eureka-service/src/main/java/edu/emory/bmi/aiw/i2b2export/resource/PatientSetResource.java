@@ -24,8 +24,10 @@ import com.sun.jersey.api.client.ClientResponse;
 import edu.emory.bmi.aiw.i2b2export.config.I2b2EurekaServicesProperties;
 import edu.emory.bmi.aiw.i2b2export.xml.I2b2ExportServiceXmlException;
 import edu.emory.cci.aiw.cvrg.eureka.common.comm.DefaultSourceConfigOption;
+import edu.emory.cci.aiw.cvrg.eureka.common.comm.Destination;
 import edu.emory.cci.aiw.cvrg.eureka.common.comm.Job;
 import edu.emory.cci.aiw.cvrg.eureka.common.comm.JobSpec;
+import edu.emory.cci.aiw.cvrg.eureka.common.comm.PatientSetExtractorDestination;
 import edu.emory.cci.aiw.cvrg.eureka.common.comm.SourceConfig;
 import edu.emory.cci.aiw.cvrg.eureka.common.comm.SourceConfig.Section;
 import edu.emory.cci.aiw.cvrg.eureka.common.comm.SourceConfigOption;
@@ -34,10 +36,10 @@ import edu.emory.cci.aiw.cvrg.eureka.common.comm.clients.ServicesClient;
 import edu.emory.cci.aiw.cvrg.eureka.common.entity.JobStatus;
 import edu.emory.cci.aiw.cvrg.eureka.common.exception.HttpStatusException;
 import edu.emory.cci.aiw.i2b2etl.dsb.I2B2DataSourceBackend;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Path;
@@ -56,17 +58,17 @@ import org.slf4j.LoggerFactory;
  *
  * @author Andrew Post
  */
-@Path("/protected/sendpatientset")
+@Path("/protected/patientset")
 @Produces(MediaType.APPLICATION_JSON)
-public class PatientSetSenderResource {
+public class PatientSetResource {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PatientSetSenderResource.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(PatientSetResource.class);
 
 	private final ServicesClient servicesClient;
 	private final I2b2EurekaServicesProperties properties;
 
 	@Inject
-	public PatientSetSenderResource(ServicesClient servicesClient, I2b2EurekaServicesProperties inProperties) {
+	public PatientSetResource(ServicesClient servicesClient, I2b2EurekaServicesProperties inProperties) {
 		this.servicesClient = servicesClient;
 		this.properties = inProperties;
 	}
@@ -88,6 +90,13 @@ public class PatientSetSenderResource {
 			section.setOptions(new SourceConfigOption[]{option});
 			sc.setDataSourceBackends(new Section[]{section});
 			jobSpec.setPrompts(sc);
+			
+			Destination destination = this.servicesClient.getDestination(actionId);
+			if (destination == null || !(destination instanceof PatientSetExtractorDestination)) {
+				throw new HttpStatusException(Status.PRECONDITION_FAILED, "Invalid action id " + actionId);
+			}
+			
+			jobSpec.setPropositionIds(Arrays.asList(((PatientSetExtractorDestination) destination).getAliasPropositionId()));
 			Long jobId = this.servicesClient.submitJob(jobSpec);
 
 			Job job;
@@ -108,6 +117,7 @@ public class PatientSetSenderResource {
 					@Override
 					public void write(OutputStream os) throws IOException {
 						IOUtils.copy(inputStream, os);
+						os.flush();
 					}
 				};
 				return Response.ok(stream).build();

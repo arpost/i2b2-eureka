@@ -26,7 +26,7 @@ i2b2.PatientSetSender.Init = function(loadedDiv) {
 	$$('DIV#Dem1Set-TABS DIV.Dem1Set-MainContent')[1].style.height = z;
 	$$('DIV#Dem1Set-TABS DIV.Dem1Set-MainContent')[2].style.height = z;
 	
-	new Ajax.Request(i2b2.PatientSetSender.EUREKA_SERVICES_URL + '/api/protected/destinations?type=PATIENT_SET_SENDER', {
+	new Ajax.Request(i2b2.PatientSetSender.EUREKA_SERVICES_URL + '/api/protected/destinations?type=PATIENT_SET_EXTRACTOR', {
 			method: 'GET',
 			contentType: 'application/json',
 			asynchronous: false,
@@ -78,7 +78,7 @@ i2b2.PatientSetSender.getResults = function() {
 		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].hide();
 		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].show();		
 
-	    new Ajax.Request(i2b2.PatientSetSender.SERVICE_URL + '/api/protected/sendpatientset?resultInstanceId=' + i2b2.PatientSetSender.model.prsRecord.sdxInfo.sdxKeyValue + '&action=' + encodeURIComponent($$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV#Dem1Set-SelectDest SELECT")[0].getValue()), {
+	    new Ajax.Request(i2b2.PatientSetSender.SERVICE_URL + '/api/protected/patientset?resultInstanceId=' + i2b2.PatientSetSender.model.prsRecord.sdxInfo.sdxKeyValue + '&action=' + encodeURIComponent($$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV#Dem1Set-SelectDest SELECT")[0].getValue()), {
 			method: 'GET',
 			contentType: 'application/json',
 			asynchronous: true,
