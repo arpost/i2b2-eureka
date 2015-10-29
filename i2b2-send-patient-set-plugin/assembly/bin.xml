@@ -39,6 +39,7 @@
 			<outputDirectory>PatientSetSender/assets</outputDirectory>
 			<includes>
 				<include>injected_screens.html</include>
+				<include>other_window.html</include>
 			</includes>
 		</fileSet>
 		<fileSet>

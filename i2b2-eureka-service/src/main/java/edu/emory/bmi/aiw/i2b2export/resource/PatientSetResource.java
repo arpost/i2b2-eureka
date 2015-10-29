@@ -20,7 +20,6 @@ package edu.emory.bmi.aiw.i2b2export.resource;
  * #L%
  */
 import com.google.inject.Inject;
-import com.sun.jersey.api.client.ClientResponse;
 import edu.emory.bmi.aiw.i2b2export.config.I2b2EurekaServicesProperties;
 import edu.emory.bmi.aiw.i2b2export.xml.I2b2ExportServiceXmlException;
 import edu.emory.cci.aiw.cvrg.eureka.common.comm.DefaultSourceConfigOption;
@@ -38,7 +37,6 @@ import edu.emory.cci.aiw.cvrg.eureka.common.exception.HttpStatusException;
 import edu.emory.cci.aiw.i2b2etl.dsb.I2B2DataSourceBackend;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
@@ -47,8 +45,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.StreamingOutput;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +70,11 @@ public class PatientSetResource {
 	}
 
 	@GET
-	public Response doSend(@QueryParam("resultInstanceId") String resultInstanceId, @QueryParam("action") String actionId) throws I2b2ExportServiceXmlException, ClientException {
+	public Response doSend(
+			@QueryParam("resultInstanceId") String resultInstanceId, 
+			@QueryParam("action") String actionId) 
+			throws I2b2ExportServiceXmlException, ClientException {
+		InputStream inputStream = null;
 		try {
 			JobSpec jobSpec = new JobSpec();
 			jobSpec.setUpdateData(false);
@@ -110,22 +110,17 @@ public class PatientSetResource {
 				job = this.servicesClient.getJob(jobId);
 				status = job.getStatus();
 			} while (status != JobStatus.COMPLETED && status != JobStatus.FAILED);
-
-			ClientResponse cr = this.servicesClient.getOutput(jobSpec.getDestinationId());
-			try (InputStream inputStream = cr.getEntityInputStream()) {
-				StreamingOutput stream = new StreamingOutput() {
-					@Override
-					public void write(OutputStream os) throws IOException {
-						IOUtils.copy(inputStream, os);
-						os.flush();
-					}
-				};
-				return Response.ok(stream).build();
-			} catch (IOException ex) {
-				throw new HttpStatusException(Status.INTERNAL_SERVER_ERROR, ex);
-			}
+			inputStream = this.servicesClient.getOutput(jobSpec.getDestinationId());
+			return Response.ok(inputStream).type(MediaType.APPLICATION_JSON).build();
 		} catch (ClientException ex) {
 			logError(ex);
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException ioe) {
+					ex.addSuppressed(ioe);
+				}
+			}
 			throw ex;
 		}
 	}
