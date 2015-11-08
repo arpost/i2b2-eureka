@@ -94,16 +94,9 @@ i2b2.PatientSetSender.getResults = function () {
 					$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].innerHTML = "Sending patient set failed.";
 				} else {
 					var patientSet = JSON.parse(response.responseText);
-					var ekPatientSet = {
-						queryName: i2b2.PatientSetSender.model.prsRecord.sdxInfo.sdxDisplayName,
-						userId: patientSet.username,
-						subjects: patientSet.patientIds
-					};
 					$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].innerHTML = "<form id=\"patientSetSenderForm\" method=\"POST\" action=\"" + i2b2.PatientSetSender.RECEIVER_SEND_URL + "\" target=\"_blank\"></form>";
 					$("patientSetSenderForm").request({
-						parameters: {
-							json: JSON.stringify(ekPatientSet)
-						},
+						parameters: i2b2.PatientSetSender.contextualize(patientSet),
 						onSuccess: function (response) {
 							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].hide();
 							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].show();
