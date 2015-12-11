@@ -13,33 +13,37 @@
 
 	<name>i2b2 Eureka Package</name>
 	<description>A project to package up all i2b2-Eureka integration projects.</description>
+	
+	<properties>
+		<i2b2-eureka-version>1.0-SNAPSHOT</i2b2-eureka-version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.eurekaclinical</groupId>
 			<artifactId>i2b2-send-patient-set-plugin</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<classifier>plugin</classifier>
+			<version>${i2b2-eureka-version}</version>
+			<classifier>bin</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.eurekaclinical</groupId>
 			<artifactId>i2b2-eureka-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${i2b2-eureka-version}</version>
 			<classifier>bin</classifier>
 			<type>zip</type>
 		</dependency>
 		<dependency>
 			<groupId>org.eurekaclinical</groupId>
 			<artifactId>i2b2-send-patient-set-plugin</artifactId>
-			<version>1.0-SNAPSHOT</version>
-			<classifier>plugin</classifier>
+			<version>${i2b2-eureka-version}</version>
+			<classifier>bin</classifier>
 			<type>tar.gz</type>
 		</dependency>
 		<dependency>
 			<groupId>org.eurekaclinical</groupId>
 			<artifactId>i2b2-eureka-service</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${i2b2-eureka-version}</version>
 			<classifier>bin</classifier>
 			<type>tar.gz</type>
 		</dependency>

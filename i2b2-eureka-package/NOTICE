@@ -36,38 +36,27 @@ This project includes:
   Google Guice - Core Library under The Apache Software License, Version 2.0
   Google Guice - Extensions - Persist under The Apache Software License, Version 2.0
   Google Guice - Extensions - Servlet under The Apache Software License, Version 2.0
-  grizzly-framework under CDDL+GPL
-  grizzly-http under CDDL+GPL
-  grizzly-http-server under CDDL+GPL
-  grizzly-http-servlet under CDDL+GPL
-  grizzly-rcm under CDDL+GPL
-  Hamcrest Core under New BSD License
   Hibernate Commons Annotations under GNU LESSER GENERAL PUBLIC LICENSE
   Hibernate JPA 2 Metamodel Generator under Apache License, Version 2.0
   HttpClient under Apache License
   HttpCore under Apache License
+  i2b2 Eureka Package under Apache License, Version 2.0
   i2b2 Eureka Service under Apache License, Version 2.0
+  i2b2 Send Patient Set Plugin under Apache License, Version 2.0
   Jackson under The Apache Software License, Version 2.0
-  Jasig CAS Client for Java - Core under Apache License Version 2.0
-  Java Servlet API under CDDL + GPLv2 with classpath exception
   Java Transaction API under Common Development and Distribution License or GNU General Public License, Version 2 with the Classpath Exception
   JavaBeans Activation Framework (JAF) under Common Development and Distribution License (CDDL) v1.0
   Javassist under MPL 1.1 or LGPL 2.1 or Apache License 2.0
   JavaUtil under Apache License, Version 2.0
   javax.inject under The Apache Software License, Version 2.0
-  javax.servlet API v.3.0 under CDDL + GPLv2 with classpath exception
   JAX-RS provider for JSON content type under The Apache Software License, Version 2.0 or GNU Lesser General Public License (LGPL), Version 2.1
   JAXB API bundle for GlassFish V3 under CDDL 1.1 or GPL2 w/ CPE
   JAXB RI under CDDL 1.1 or GPL2 w/ CPE
   JBoss Logging 3 under GNU Lesser General Public License, version 2.1
   je under Sleepycat License
   Jersey Apache HTTP Client under CDDL 1.1 or GPL2 w/ CPE
-  Jersey Test Framework - Core under CDDL 1.1 or GPL2 w/ CPE
-  Jersey Test Framework - Grizzly 2 Module under CDDL 1.1 or GPL2 w/ CPE
   jersey-client under CDDL 1.1 or GPL2 w/ CPE
   jersey-core under CDDL 1.1 or GPL2 w/ CPE
-  jersey-grizzly2 under CDDL 1.1 or GPL2 w/ CPE
-  jersey-grizzly2-servlet under CDDL 1.1 or GPL2 w/ CPE
   jersey-guice under CDDL 1.1 or GPL2 w/ CPE
   jersey-json under CDDL 1.1 or GPL2 w/ CPE
   jersey-multipart under CDDL 1.1 or GPL2 w/ CPE
@@ -75,7 +64,6 @@ This project includes:
   jersey-servlet under CDDL 1.1 or GPL2 w/ CPE
   Jettison under Apache License, Version 2.0
   JPA 2.0 API under Sun Binary Code License
-  JUnit under Eclipse Public License 1.0
   kXML 2 is a small XML pull parser based on the common XML pull API under BSD style or Public Domain
   Logging under The Apache Software License, Version 2.0
   logkit under Apache License, Version 2.0

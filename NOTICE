@@ -46,7 +46,10 @@ This project includes:
   Hibernate JPA 2 Metamodel Generator under Apache License, Version 2.0
   HttpClient under Apache License
   HttpCore under Apache License
+  i2b2 Eureka Integration under Apache License, Version 2.0
+  i2b2 Eureka Package under Apache License, Version 2.0
   i2b2 Eureka Service under Apache License, Version 2.0
+  i2b2 Send Patient Set Plugin under Apache License, Version 2.0
   Jackson under The Apache Software License, Version 2.0
   Jasig CAS Client for Java - Core under Apache License Version 2.0
   Java Servlet API under CDDL + GPLv2 with classpath exception
