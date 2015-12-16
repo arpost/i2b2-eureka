@@ -31,9 +31,6 @@ i2b2.PatientSetSender.Init = function (loadedDiv) {
 		contentType: 'application/json',
 		asynchronous: false,
 		onSuccess: function (response) {
-			//$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].hide();			
-			//$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].show();
-			//$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].innerHTML = "Patient set send has been requested";
 			var destinations = JSON.parse(response.responseText);
 			var s = "<select>";
 			for (var i = 0; i < destinations.length; i++) {
@@ -77,49 +74,16 @@ i2b2.PatientSetSender.getResults = function () {
 		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-directions")[0].hide();
 		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].hide();
 		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].show();
-
-		new Ajax.Request(i2b2.PatientSetSender.SERVICE_URL + '/api/protected/patientset', {
-			method: 'get',
-			dataType: 'json',
-			asynchronous: true,
-			parameters: {
-				resultInstanceId: i2b2.PatientSetSender.model.prsRecord.sdxInfo.sdxKeyValue,
-				action: $$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV#Dem1Set-SelectDest SELECT")[0].getValue()
-			},
-			onSuccess: function (response) {
-				if (!response.responseText) {
-					alert('Error retrieving patient set.');
-					$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].hide();
-					$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].show();
-					$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].innerHTML = "Sending patient set failed.";
-				} else {
-					var patientSet = JSON.parse(response.responseText);
-					$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].innerHTML = "<form id=\"patientSetSenderForm\" method=\"POST\" action=\"" + i2b2.PatientSetSender.RECEIVER_SEND_URL + "\" target=\"_blank\"></form>";
-					$("patientSetSenderForm").request({
-						parameters: i2b2.PatientSetSender.contextualize(patientSet),
-						onSuccess: function (response) {
-							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].hide();
-							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].show();
-							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].innerHTML = "Patient set sent successfully.";
-						},
-						onFailure: function (response) {
-							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].hide();
-							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].show();
-							$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].innerHTML = "Patient set could not be sent: " + response.responseText + ".";
-						}
-					}); 
-					
-				}
-			},
-			onFailure: function (response) {
-				alert('Error retrieving patient set.');
-				$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].hide();
-				$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].show();
-				$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].innerHTML = "Patient set could not be sent: " + response.responseText + ".";
-			},
-			onComplete: function (response) {
-				i2b2.PatientSetSender.model.dirtyResultsData = false;
-			}
-		});
+		
+		window.name = "opener";
+		
+		i2b2.PatientSetSender.eurekaServicesURL = i2b2.PatientSetSender.SERVICE_URL + '/api/protected/patientset';
+		i2b2.PatientSetSender.selectedReceiverUrl = i2b2.PatientSetSender.RECEIVER_SEND_URL;
+		
+		window.open(i2b2.PatientSetSender.cfg.config.assetDir + 'patient_set_sender.html');
+		
+		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-working")[0].hide();
+		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].show();
+		$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV.results-finished")[0].innerHTML = '';
 	}
 };

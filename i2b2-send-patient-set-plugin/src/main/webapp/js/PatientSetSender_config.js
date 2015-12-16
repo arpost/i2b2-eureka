@@ -11,13 +11,14 @@ i2b2.PatientSetSender.context = {
 	},
 	CVRG: function (patientSet) {
 		var username = patientSet.username;
+		var userIdVar = username ? username.substring(username.indexOf('#') + 1) : username;
 		var cvrgPatientSet = {
-				queryName: i2b2.PatientSetSender.model.prsRecord.sdxInfo.sdxDisplayName,
-				userId: username ? username.substring(username.indexOf('#') + 1) : username,
-				subjects: patientSet.patientIds
+				queryName: i2b2.PatientSetSender.model.prsRecord.sdxInfo.sdxDisplayName.substring(0, 50),
+				userId: userIdVar,
+				subjects: patientSet.patients
 			};
 		return {
-			json: JSON.stringify(cvrgPatientSet)
+			json: Object.toJSON(cvrgPatientSet)
 		};
 	}
 };

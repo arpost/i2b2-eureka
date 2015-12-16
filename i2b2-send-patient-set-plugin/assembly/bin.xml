@@ -39,7 +39,8 @@
 			<outputDirectory>PatientSetSender/assets</outputDirectory>
 			<includes>
 				<include>injected_screens.html</include>
-				<include>other_window.html</include>
+				<include>patient_set_sender.html</include>
+				<include>prototype-1.7.3.js</include>
 			</includes>
 		</fileSet>
 		<fileSet>

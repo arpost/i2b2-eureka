@@ -12,7 +12,7 @@
 		// additional configuration variables that are set by the system
 		short_name: "Send Patient Set",
 		name: "Send Patient Set",
-		description: "Export the results of a patient query.",
+		description: "Send a patient set to another application.",
 		category: ["celless","plugin","local"],
 		plugin: {
 			isolateHtml: false,  // this means do not use an IFRAME
