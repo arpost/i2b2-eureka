@@ -15,43 +15,9 @@
 		plugin. It supports exporting an i2b2 patient set with a
 		user-defined configuration, as well as saving configurations.
 	</description>
-
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-			<distribution>manual</distribution>
-		</license>
-	</licenses>
-
-	<properties>
-		<jersey-version>1.8</jersey-version>
-	</properties>
-
+	
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<configuration>
-					<licenseName>apache_v2</licenseName>
-					<roots>
-						<root>src/main</root>
-						<root>src/test/java/</root>
-					</roots>
-					<extraExtensions>
-						<!-- .xsd files are not supported by default -->
-						<!-- but should be commented in XML style -->
-						<xsd>xml</xsd>
-					</extraExtensions>
-					<excludes>
-						<exclude>**/*.htm</exclude>
-						<exclude>**/*.html</exclude>
-						<exclude>**/*.js</exclude>
-						<exclude>**/*.css</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.jasig.maven</groupId>
 				<artifactId>maven-notice-plugin</artifactId>
@@ -76,89 +42,36 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>1.17.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>1.17.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>1.17.1</version>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.jersey.jersey-test-framework</groupId>
 			<artifactId>jersey-test-framework-grizzly2</artifactId>
-			<version>1.17.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.1</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>2.3.19</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-servlet</artifactId>
-			<version>3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.inject.extensions</groupId>
-			<artifactId>guice-persist</artifactId>
-			<version>3.0</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-guice</artifactId>
-			<version>1.17.1</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-jdk14</artifactId>
-			<version>1.6.4</version>
+			<groupId>org.eurekaclinical</groupId>
+			<artifactId>eurekaclinical-common</artifactId>
+			<version>1.0-Alpha-7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eurekaclinical</groupId>
-			<artifactId>eureka-common</artifactId>
-			<version>2.0-Alpha-4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jasig.cas.client</groupId>
-			<artifactId>cas-client-core</artifactId>
-			<version>3.2.1</version>
-			<scope>provided</scope>
+			<artifactId>i2b2-client</artifactId>
+			<version>1.0-Alpha-1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eurekaclinical</groupId>
-			<artifactId>aiw-i2b2-etl</artifactId>
-			<version>2.0-Alpha-5</version>
+			<artifactId>eureka-client</artifactId>
+			<version>1.0-Alpha-1</version>
 		</dependency>
 	</dependencies>
 </project>

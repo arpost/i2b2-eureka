@@ -1,4 +1,4 @@
-package edu.emory.bmi.aiw.i2b2export.config;
+package org.eurekaclinical.i2b2eureka.config;
 
 /*
  * #%L
@@ -21,12 +21,14 @@ package edu.emory.bmi.aiw.i2b2export.config;
  */
 
 import com.google.inject.AbstractModule;
-import edu.emory.bmi.aiw.i2b2export.i2b2.I2b2PdoRetriever;
-import edu.emory.bmi.aiw.i2b2export.i2b2.I2b2PdoRetrieverImpl;
-import edu.emory.bmi.aiw.i2b2export.i2b2.I2b2UserAuthenticator;
-import edu.emory.bmi.aiw.i2b2export.i2b2.I2b2UserAuthenticatorImpl;
-import edu.emory.bmi.aiw.i2b2export.provider.ServicesClientProvider;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.clients.ServicesClient;
+import org.eurekaclinical.eureka.client.EurekaClient;
+import org.eurekaclinical.i2b2.client.I2b2PdoRetriever;
+import org.eurekaclinical.i2b2.client.I2b2PdoRetrieverImpl;
+import org.eurekaclinical.i2b2.client.I2b2UserAuthenticator;
+import org.eurekaclinical.i2b2.client.I2b2UserAuthenticatorImpl;
+import org.eurekaclinical.i2b2eureka.provider.ServicesClientProvider;
+import org.eurekaclinical.i2b2.client.props.I2b2Properties;
+import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
 
 /**
  * Configuration for Guice interface bindings.
@@ -40,6 +42,7 @@ public class GuiceConfigModule extends AbstractModule {
 	protected void configure() {
 		bind(I2b2UserAuthenticator.class).to(I2b2UserAuthenticatorImpl.class);
 		bind(I2b2PdoRetriever.class).to(I2b2PdoRetrieverImpl.class);
-		bind(ServicesClient.class).toProvider(ServicesClientProvider.class);
+		bind(EurekaClient.class).toProvider(ServicesClientProvider.class);
+		bind(I2b2Properties.class).to(I2b2EurekaServicesProperties.class);
 	}
 }

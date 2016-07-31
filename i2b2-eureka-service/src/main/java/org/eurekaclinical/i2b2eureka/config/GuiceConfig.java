@@ -1,4 +1,4 @@
-package edu.emory.bmi.aiw.i2b2export.config;
+package org.eurekaclinical.i2b2eureka.config;
 
 /*
  * #%L
@@ -20,6 +20,7 @@ package edu.emory.bmi.aiw.i2b2export.config;
  * #L%
  */
 
+import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;

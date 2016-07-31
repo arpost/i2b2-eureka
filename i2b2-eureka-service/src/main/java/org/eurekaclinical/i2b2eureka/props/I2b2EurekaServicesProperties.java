@@ -1,4 +1,4 @@
-package edu.emory.bmi.aiw.i2b2export.config;
+package org.eurekaclinical.i2b2eureka.props;
 
 /*
  * #%L
@@ -20,28 +20,29 @@ package edu.emory.bmi.aiw.i2b2export.config;
  * #L%
  */
 
+import org.eurekaclinical.i2b2.client.props.I2b2Properties;
 import com.google.inject.Singleton;
-import edu.emory.cci.aiw.cvrg.eureka.common.props.AbstractProperties;
+import org.eurekaclinical.standardapis.props.EurekaClinicalProperties;
 
 /**
  *
  * @author Andrew Post
  */
 @Singleton
-public class I2b2EurekaServicesProperties extends AbstractProperties {
+public class I2b2EurekaServicesProperties extends EurekaClinicalProperties implements I2b2Properties {
+
+	public I2b2EurekaServicesProperties() {
+		super("/etc/ec-i2b2");
+	}
 	
 	@Override
 	public String getProxyCallbackServer() {
-		return this.getValue("i2b2eureka.services.callbackserver", "https://localhost:8443");
+		return this.getValue("eurekaclinical.i2b2service.callbackserver", "https://localhost:8443");
 	}
 	
-	/**
-	 * Gets the URL of the i2b2 proxy cell. Reads from the properties file first if necessary.
-	 *
-	 * @return the URL as a String
-	 */
+	@Override
 	public String getProxyUrl() {
-		return this.getValue("i2b2eureka.proxyUrl", "https://localhost/i2b2/index.php");
+		return this.getValue("eurekaclinical.i2b2service.proxyUrl", "https://localhost/i2b2/index.php");
 	}
 
 	/**
@@ -49,16 +50,17 @@ public class I2b2EurekaServicesProperties extends AbstractProperties {
 	 *
 	 * @return the URL as a String
 	 */
+	@Override
 	public String getI2b2ServiceHostUrl() {
-		return this.getValue("i2b2eureka.serviceHostUrl", "http://localhost:9090");
+		return this.getValue("eurekaclinical.i2b2service.serviceHostUrl", "http://localhost:9090");
 	}
 	
 	public String getServiceUrl() {
-		return this.getValue("eureka.services.url", "https://localhost/eureka-services");
+		return this.getValue("eureka.webapp.url", "https://localhost/eureka-webapp");
 	}
 	
 	public String getSourceConfigId() {
-		return this.getValue("i2b2eureka.sourceConfigId", "i2b2 Eureka Service");
+		return this.getValue("eurekaclinical.i2b2service.sourceConfigId", "i2b2 Eureka Service");
 	}
 	
 }

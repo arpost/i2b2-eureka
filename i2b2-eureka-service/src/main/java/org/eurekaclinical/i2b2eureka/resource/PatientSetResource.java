@@ -1,4 +1,4 @@
-package edu.emory.bmi.aiw.i2b2export.resource;
+package org.eurekaclinical.i2b2eureka.resource;
 
 /*
  * #%L
@@ -20,21 +20,8 @@ package edu.emory.bmi.aiw.i2b2export.resource;
  * #L%
  */
 import com.google.inject.Inject;
-import edu.emory.bmi.aiw.i2b2export.config.I2b2EurekaServicesProperties;
-import edu.emory.bmi.aiw.i2b2export.xml.I2b2ExportServiceXmlException;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.DefaultSourceConfigOption;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.Destination;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.Job;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.JobSpec;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.PatientSetExtractorDestination;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.SourceConfig;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.SourceConfig.Section;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.SourceConfigOption;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.clients.ClientException;
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.clients.ServicesClient;
-import edu.emory.cci.aiw.cvrg.eureka.common.entity.JobStatus;
-import edu.emory.cci.aiw.cvrg.eureka.common.exception.HttpStatusException;
-import edu.emory.cci.aiw.i2b2etl.dsb.I2B2DataSourceBackend;
+import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
+import org.eurekaclinical.i2b2.client.xml.I2b2XmlException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -45,6 +32,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import org.eurekaclinical.common.comm.clients.ClientException;
+import org.eurekaclinical.eureka.client.EurekaClient;
+import org.eurekaclinical.eureka.client.comm.DefaultSourceConfigOption;
+import org.eurekaclinical.eureka.client.comm.Destination;
+import org.eurekaclinical.eureka.client.comm.Job;
+import org.eurekaclinical.eureka.client.comm.JobSpec;
+import org.eurekaclinical.eureka.client.comm.JobStatus;
+import org.eurekaclinical.eureka.client.comm.PatientSetExtractorDestination;
+import org.eurekaclinical.eureka.client.comm.SourceConfig;
+import org.eurekaclinical.eureka.client.comm.SourceConfig.Section;
+import org.eurekaclinical.eureka.client.comm.SourceConfigOption;
+import org.eurekaclinical.standardapis.exception.HttpStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,12 +59,12 @@ public class PatientSetResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PatientSetResource.class);
 
-	private final ServicesClient servicesClient;
+	private final EurekaClient eurekaClient;
 	private final I2b2EurekaServicesProperties properties;
 
 	@Inject
-	public PatientSetResource(ServicesClient servicesClient, I2b2EurekaServicesProperties inProperties) {
-		this.servicesClient = servicesClient;
+	public PatientSetResource(EurekaClient inEurekaClient, I2b2EurekaServicesProperties inProperties) {
+		this.eurekaClient = inEurekaClient;
 		this.properties = inProperties;
 	}
 
@@ -73,7 +72,7 @@ public class PatientSetResource {
 	public Response doSend(
 			@QueryParam("resultInstanceId") String resultInstanceId, 
 			@QueryParam("action") String actionId) 
-			throws I2b2ExportServiceXmlException, ClientException {
+			throws I2b2XmlException, ClientException {
 		InputStream inputStream = null;
 		try {
 			JobSpec jobSpec = new JobSpec();
@@ -83,7 +82,7 @@ public class PatientSetResource {
 			SourceConfig sc = new SourceConfig();
 			sc.setId(properties.getSourceConfigId());
 			Section section = new Section();
-			section.setId(I2B2DataSourceBackend.class.getName());
+			section.setId("edu.emory.cci.aiw.i2b2etl.dsb.I2B2DataSourceBackend");
 			DefaultSourceConfigOption option = new DefaultSourceConfigOption();
 			option.setName("resultInstanceId");
 			option.setValue(new Long(resultInstanceId));
@@ -91,13 +90,13 @@ public class PatientSetResource {
 			sc.setDataSourceBackends(new Section[]{section});
 			jobSpec.setPrompts(sc);
 			
-			Destination destination = this.servicesClient.getDestination(actionId);
+			Destination destination = this.eurekaClient.getDestination(actionId);
 			if (destination == null || !(destination instanceof PatientSetExtractorDestination)) {
 				throw new HttpStatusException(Status.PRECONDITION_FAILED, "Invalid action id " + actionId);
 			}
 			
 			jobSpec.setPropositionIds(Arrays.asList(((PatientSetExtractorDestination) destination).getAliasPropositionId()));
-			Long jobId = this.servicesClient.submitJob(jobSpec);
+			Long jobId = this.eurekaClient.submitJob(jobSpec);
 
 			Job job;
 			JobStatus status;
@@ -107,10 +106,10 @@ public class PatientSetResource {
 				} catch (InterruptedException ex) {
 					return Response.status(Status.SERVICE_UNAVAILABLE).build();
 				}
-				job = this.servicesClient.getJob(jobId);
+				job = this.eurekaClient.getJob(jobId);
 				status = job.getStatus();
 			} while (status != JobStatus.COMPLETED && status != JobStatus.FAILED);
-			inputStream = this.servicesClient.getOutput(jobSpec.getDestinationId());
+			inputStream = this.eurekaClient.getOutput(jobSpec.getDestinationId());
 			return Response.ok(inputStream).type(MediaType.APPLICATION_JSON).build();
 		} catch (ClientException ex) {
 			logError(ex);

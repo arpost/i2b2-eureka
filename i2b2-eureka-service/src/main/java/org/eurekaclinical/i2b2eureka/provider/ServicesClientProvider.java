@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package edu.emory.bmi.aiw.i2b2export.provider;
+package org.eurekaclinical.i2b2eureka.provider;
 
 /*
  * #%L
@@ -32,29 +26,28 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import edu.emory.bmi.aiw.i2b2export.config.I2b2EurekaServicesProperties;
-
-import edu.emory.cci.aiw.cvrg.eureka.common.comm.clients.ServicesClient;
+import org.eurekaclinical.eureka.client.EurekaClient;
+import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
 
 /**
  * 
- * @author hrathod
+ * @author Andrew Post
  */
 @Singleton
-public class ServicesClientProvider implements Provider<ServicesClient> {
+public class ServicesClientProvider implements Provider<EurekaClient> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ServicesClientProvider.class);
-	private final ServicesClient client;
+	private final EurekaClient client;
 
 	@Inject
 	public ServicesClientProvider(I2b2EurekaServicesProperties inProperties) {
 		LOGGER.debug("service url = {}", inProperties.getServiceUrl());
-		this.client = new ServicesClient(inProperties.getServiceUrl());
+		this.client = new EurekaClient(inProperties.getServiceUrl());
 	}
 
 	@Override
-	public ServicesClient get() {
+	public EurekaClient get() {
 		return this.client;
 	}
 

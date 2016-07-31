@@ -19,11 +19,8 @@
  */
 
 /**
- * Consists of classes that represent objects in i2b2's Patient Data Object model, including
- * {@link edu.emory.bmi.aiw.i2b2export.i2b2.pdo.Patient}, {@link edu.emory.bmi.aiw.i2b2export.i2b2.pdo.Event},
- * {@link edu.emory.bmi.aiw.i2b2export.i2b2.pdo.Observer}, and {@link edu.emory.bmi.aiw.i2b2export.i2b2.pdo.Observation}.
- * It also provides funcationality for parsing PDO result XML into Java objects.
+ * Contains Jersey and Guice configuration classes.
  *
  * @since 1.0
  */
-package edu.emory.bmi.aiw.i2b2export.i2b2.pdo;
+package org.eurekaclinical.i2b2eureka.config;

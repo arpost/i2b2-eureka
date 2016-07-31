@@ -1,3 +1,5 @@
+package org.eurekaclinical.i2b2eureka.config;
+
 /*
  * #%L
  * i2b2 Export Service
@@ -18,10 +20,21 @@
  * #L%
  */
 
+import org.eurekaclinical.common.config.AbstractAuthorizingJerseyServletModule;
+import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
+
+
 /**
- * Consists of communication classes between this service and a client. They are generally serialized to
- * and deserialized from JSON automatically by Jersey.
+ * Jersey servlet configuration.
  *
+ * @author Michel Mansour
  * @since 1.0
  */
-package edu.emory.bmi.aiw.i2b2export.comm;
+public class ServletConfigModule extends AbstractAuthorizingJerseyServletModule {
+	private static final String PACKAGE_NAMES = "org.eurekaclinical.i2b2eureka.resource";
+	
+	public ServletConfigModule(I2b2EurekaServicesProperties inProperties) {
+		super(inProperties, PACKAGE_NAMES);
+	}
+
+}

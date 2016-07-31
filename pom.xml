@@ -13,8 +13,8 @@
 	<inceptionYear>2015</inceptionYear>
 	<parent>
 		<groupId>org.eurekaclinical</groupId>
-		<artifactId>eurekaclinical-parent</artifactId>
-		<version>1-Alpha-9</version>
+		<artifactId>eurekaclinical-parent-standard-deps</artifactId>
+		<version>1-Alpha-5</version>
 	</parent>
 
 	<url>https://github.com/eurekaclinical/i2b2-eureka.git</url>
@@ -37,14 +37,6 @@
 		<url>https://github.com/eurekaclinical/i2b2-eureka/issues</url>
 	</issueManagement>
 
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-			<distribution>manual</distribution>
-		</license>
-	</licenses>
-	
 	<build>
 		<plugins>
 			<plugin>
