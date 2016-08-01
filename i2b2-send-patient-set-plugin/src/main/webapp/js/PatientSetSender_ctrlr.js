@@ -45,7 +45,7 @@ i2b2.PatientSetSender.Init = function (loadedDiv) {
 	$$('DIV#Dem1Set-TABS DIV.Dem1Set-MainContent')[1].style.height = z;
 	$$('DIV#Dem1Set-TABS DIV.Dem1Set-MainContent')[2].style.height = z;
 
-	new Ajax.Request(i2b2.PatientSetSender.EUREKA_SERVICES_URL + '/api/protected/destinations?type=PATIENT_SET_EXTRACTOR', {
+	new Ajax.Request(i2b2.PatientSetSender.EUREKA_SERVICES_URL + '/proxy-resource/destinations?type=PATIENT_SET_EXTRACTOR', {
 		method: 'get',
 		contentType: 'application/json',
 		asynchronous: false,
