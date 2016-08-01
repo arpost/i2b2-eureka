@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2eureka.provider;
+package org.eurekaclinical.i2b2.provider;
 
 /*
  * #%L
@@ -23,11 +23,11 @@ package org.eurekaclinical.i2b2eureka.provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import org.eurekaclinical.eureka.client.EurekaClient;
-import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
+import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
 
 /**
  * 

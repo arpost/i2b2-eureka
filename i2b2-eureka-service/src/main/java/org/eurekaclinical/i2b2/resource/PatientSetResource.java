@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2eureka.resource;
+package org.eurekaclinical.i2b2.resource;
 
 /*
  * #%L
@@ -19,12 +19,12 @@ package org.eurekaclinical.i2b2eureka.resource;
  * limitations under the License.
  * #L%
  */
-import com.google.inject.Inject;
-import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
+import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
 import org.eurekaclinical.i2b2.client.xml.I2b2XmlException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Path;

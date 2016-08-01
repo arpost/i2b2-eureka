@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2eureka.config;
+package org.eurekaclinical.i2b2.config;
 
 /*
  * #%L
@@ -20,7 +20,7 @@ package org.eurekaclinical.i2b2eureka.config;
  * #L%
  */
 
-import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
+import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.jpa.JpaPersistModule;
@@ -39,7 +39,7 @@ public final class GuiceConfig extends GuiceServletContextListener {
 	protected Injector getInjector() {
 		
 		return Guice.createInjector(
-				new JpaPersistModule("i2b2-export-persist"), 
+				new JpaPersistModule("i2b2-jpa-unit"), 
 				new ServletConfigModule(this.properties),
 				new GuiceConfigModule());
 	}

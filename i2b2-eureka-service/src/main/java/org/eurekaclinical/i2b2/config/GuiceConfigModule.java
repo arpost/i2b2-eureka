@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2eureka.config;
+package org.eurekaclinical.i2b2.config;
 
 /*
  * #%L
@@ -21,14 +21,21 @@ package org.eurekaclinical.i2b2eureka.config;
  */
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import org.eurekaclinical.eureka.client.EurekaClient;
 import org.eurekaclinical.i2b2.client.I2b2PdoRetriever;
 import org.eurekaclinical.i2b2.client.I2b2PdoRetrieverImpl;
 import org.eurekaclinical.i2b2.client.I2b2UserAuthenticator;
 import org.eurekaclinical.i2b2.client.I2b2UserAuthenticatorImpl;
-import org.eurekaclinical.i2b2eureka.provider.ServicesClientProvider;
+import org.eurekaclinical.i2b2.provider.ServicesClientProvider;
 import org.eurekaclinical.i2b2.client.props.I2b2Properties;
-import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
+import org.eurekaclinical.i2b2.dao.JpaRoleDao;
+import org.eurekaclinical.i2b2.dao.JpaUserDao;
+import org.eurekaclinical.i2b2.entity.RoleEntity;
+import org.eurekaclinical.i2b2.entity.UserEntity;
+import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
+import org.eurekaclinical.standardapis.dao.RoleDao;
+import org.eurekaclinical.standardapis.dao.UserDao;
 
 /**
  * Configuration for Guice interface bindings.
@@ -44,5 +51,8 @@ public class GuiceConfigModule extends AbstractModule {
 		bind(I2b2PdoRetriever.class).to(I2b2PdoRetrieverImpl.class);
 		bind(EurekaClient.class).toProvider(ServicesClientProvider.class);
 		bind(I2b2Properties.class).to(I2b2EurekaServicesProperties.class);
+		bind(new TypeLiteral<UserDao<UserEntity>>() {}).to(JpaUserDao.class);
+        bind(new TypeLiteral<UserDao<? extends org.eurekaclinical.standardapis.entity.UserEntity<? extends org.eurekaclinical.standardapis.entity.RoleEntity>>>() {}).to(JpaUserDao.class);
+        bind(new TypeLiteral<RoleDao<RoleEntity>>() {}).to(JpaRoleDao.class);
 	}
 }

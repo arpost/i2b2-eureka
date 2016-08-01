@@ -1,4 +1,4 @@
-package org.eurekaclinical.i2b2eureka.props;
+package org.eurekaclinical.i2b2.props;
 
 /*
  * #%L
@@ -20,8 +20,8 @@ package org.eurekaclinical.i2b2eureka.props;
  * #L%
  */
 
+import javax.inject.Singleton;
 import org.eurekaclinical.i2b2.client.props.I2b2Properties;
-import com.google.inject.Singleton;
 import org.eurekaclinical.standardapis.props.CasEurekaClinicalProperties;
 
 /**
