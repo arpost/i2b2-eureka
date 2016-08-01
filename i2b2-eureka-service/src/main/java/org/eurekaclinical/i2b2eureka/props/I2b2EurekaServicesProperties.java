@@ -22,14 +22,14 @@ package org.eurekaclinical.i2b2eureka.props;
 
 import org.eurekaclinical.i2b2.client.props.I2b2Properties;
 import com.google.inject.Singleton;
-import org.eurekaclinical.standardapis.props.EurekaClinicalProperties;
+import org.eurekaclinical.standardapis.props.CasEurekaClinicalProperties;
 
 /**
  *
  * @author Andrew Post
  */
 @Singleton
-public class I2b2EurekaServicesProperties extends EurekaClinicalProperties implements I2b2Properties {
+public class I2b2EurekaServicesProperties extends CasEurekaClinicalProperties implements I2b2Properties {
 
 	public I2b2EurekaServicesProperties() {
 		super("/etc/ec-i2b2");
