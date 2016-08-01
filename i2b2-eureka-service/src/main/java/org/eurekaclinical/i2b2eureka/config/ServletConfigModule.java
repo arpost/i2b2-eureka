@@ -20,7 +20,7 @@ package org.eurekaclinical.i2b2eureka.config;
  * #L%
  */
 
-import org.eurekaclinical.common.config.AbstractAuthorizingJerseyServletModule;
+import org.eurekaclinical.common.config.AbstractJerseyServletModule;
 import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
 
 
@@ -30,7 +30,7 @@ import org.eurekaclinical.i2b2eureka.props.I2b2EurekaServicesProperties;
  * @author Michel Mansour
  * @since 1.0
  */
-public class ServletConfigModule extends AbstractAuthorizingJerseyServletModule {
+public class ServletConfigModule extends AbstractJerseyServletModule {
 	private static final String PACKAGE_NAMES = "org.eurekaclinical.i2b2eureka.resource";
 	
 	public ServletConfigModule(I2b2EurekaServicesProperties inProperties) {
