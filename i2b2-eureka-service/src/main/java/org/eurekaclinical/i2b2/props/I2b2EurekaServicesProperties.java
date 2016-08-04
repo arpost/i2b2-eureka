@@ -31,7 +31,7 @@ import org.eurekaclinical.standardapis.props.CasEurekaClinicalProperties;
 public class I2b2EurekaServicesProperties extends CasEurekaClinicalProperties {
 
 	public I2b2EurekaServicesProperties() {
-		super("/etc/ec-i2b2");
+		super("/etc/ec-i2b2-integration");
 	}
 	
 	@Override
