@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.eurekaclinical</groupId>
 		<artifactId>i2b2-eureka</artifactId>
-		<version>1.0-Alpha-6</version>
+		<version>1.0-Alpha-7-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>i2b2-eureka-service</artifactId>
