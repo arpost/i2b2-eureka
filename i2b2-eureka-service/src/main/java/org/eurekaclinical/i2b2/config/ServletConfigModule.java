@@ -36,5 +36,5 @@ public class ServletConfigModule extends AbstractAuthorizingJerseyServletModuleW
 	public ServletConfigModule(I2b2EurekaServicesProperties inProperties) {
 		super(inProperties, PACKAGE_NAMES);
 	}
-
+	
 }

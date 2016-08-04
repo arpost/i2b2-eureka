@@ -1,10 +1,10 @@
 package org.eurekaclinical.i2b2.config;
 
-/*
+/*-
  * #%L
- * i2b2 Export Service
+ * i2b2 Eureka Service
  * %%
- * Copyright (C) 2013 Emory University
+ * Copyright (C) 2015 - 2016 Emory University
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,19 +23,36 @@ package org.eurekaclinical.i2b2.config;
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 import org.eurekaclinical.eureka.client.EurekaClient;
-import org.eurekaclinical.i2b2.client.I2b2PdoRetriever;
-import org.eurekaclinical.i2b2.client.I2b2PdoRetrieverImpl;
-import org.eurekaclinical.i2b2.client.I2b2UserAuthenticator;
-import org.eurekaclinical.i2b2.client.I2b2UserAuthenticatorImpl;
-import org.eurekaclinical.i2b2.provider.ServicesClientProvider;
-import org.eurekaclinical.i2b2.client.props.I2b2Properties;
+import org.eurekaclinical.i2b2.provider.EurekaClientProvider;
+import org.eurekaclinical.i2b2.dao.I2b2DomainDao;
+import org.eurekaclinical.i2b2.dao.I2b2ProjectDao;
+import org.eurekaclinical.i2b2.dao.I2b2RoleDao;
+import org.eurekaclinical.i2b2.dao.JpaGroupDao;
+import org.eurekaclinical.i2b2.dao.JpaI2b2DomainDao;
+import org.eurekaclinical.i2b2.dao.JpaI2b2ProjectDao;
 import org.eurekaclinical.i2b2.dao.JpaRoleDao;
+import org.eurekaclinical.i2b2.dao.JpaI2b2RoleDao;
 import org.eurekaclinical.i2b2.dao.JpaUserDao;
+import org.eurekaclinical.i2b2.dao.JpaUserTemplateDao;
+import org.eurekaclinical.i2b2.entity.GroupEntity;
+import org.eurekaclinical.i2b2.entity.I2b2DomainEntity;
+import org.eurekaclinical.i2b2.entity.I2b2ProjectEntity;
+import org.eurekaclinical.i2b2.entity.I2b2RoleEntity;
 import org.eurekaclinical.i2b2.entity.RoleEntity;
 import org.eurekaclinical.i2b2.entity.UserEntity;
-import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
+import org.eurekaclinical.i2b2.entity.UserTemplateEntity;
+import org.eurekaclinical.i2b2.filter.I2b2AutoAuthorizationFilter;
+import org.eurekaclinical.standardapis.dao.GroupDao;
 import org.eurekaclinical.standardapis.dao.RoleDao;
 import org.eurekaclinical.standardapis.dao.UserDao;
+import org.eurekaclinical.standardapis.dao.UserTemplateDao;
+import org.eurekaclinical.common.filter.AutoAuthorizationFilter;
+import org.eurekaclinical.i2b2.client.I2b2ClientFactory;
+import org.eurekaclinical.i2b2.client.I2b2ClientFactoryImpl;
+import org.eurekaclinical.i2b2.client.I2b2UserSetterFactory;
+import org.eurekaclinical.i2b2.client.I2b2UserSetterFactoryImpl;
+import org.eurekaclinical.i2b2.provider.EurekaClinicalUserAgreementClientProvider;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
 
 /**
  * Configuration for Guice interface bindings.
@@ -47,12 +64,19 @@ public class GuiceConfigModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bind(I2b2UserAuthenticator.class).to(I2b2UserAuthenticatorImpl.class);
-		bind(I2b2PdoRetriever.class).to(I2b2PdoRetrieverImpl.class);
-		bind(EurekaClient.class).toProvider(ServicesClientProvider.class);
-		bind(I2b2Properties.class).to(I2b2EurekaServicesProperties.class);
+		bind(I2b2ClientFactory.class).to(I2b2ClientFactoryImpl.class);
+		bind(I2b2UserSetterFactory.class).to(I2b2UserSetterFactoryImpl.class);
+		bind(EurekaClient.class).toProvider(EurekaClientProvider.class);
+		bind(EurekaClinicalUserAgreementClient.class).toProvider(EurekaClinicalUserAgreementClientProvider.class);
 		bind(new TypeLiteral<UserDao<UserEntity>>() {}).to(JpaUserDao.class);
+		bind(new TypeLiteral<UserTemplateDao<UserTemplateEntity>>() {}).to(JpaUserTemplateDao.class);
         bind(new TypeLiteral<UserDao<? extends org.eurekaclinical.standardapis.entity.UserEntity<? extends org.eurekaclinical.standardapis.entity.RoleEntity>>>() {}).to(JpaUserDao.class);
         bind(new TypeLiteral<RoleDao<RoleEntity>>() {}).to(JpaRoleDao.class);
+		bind(new TypeLiteral<GroupDao<GroupEntity>>() {}).to(JpaGroupDao.class);
+		bind(new TypeLiteral<I2b2ProjectDao<I2b2ProjectEntity>>() {}).to(JpaI2b2ProjectDao.class);
+		bind(new TypeLiteral<I2b2RoleDao<I2b2RoleEntity>>() {}).to(JpaI2b2RoleDao.class);
+		bind(I2b2RoleDao.class).to(JpaI2b2RoleDao.class);
+		bind(new TypeLiteral<I2b2DomainDao<I2b2DomainEntity>>() {}).to(JpaI2b2DomainDao.class);
+		bind(AutoAuthorizationFilter.class).to(I2b2AutoAuthorizationFilter.class);
 	}
 }

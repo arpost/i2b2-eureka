@@ -24,51 +24,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 
 /**
- * A bean class to hold information about users in the system.
  *
- * @author Andrew Post
- *
+ * @author ANdrew Post
  */
+@Table(name = "usertemplates")
 @Entity
-@Table(name = "users")
-public class UserEntity implements org.eurekaclinical.standardapis.entity.UserEntity<RoleEntity> {
+public class UserTemplateEntity implements org.eurekaclinical.standardapis.entity.UserTemplateEntity<RoleEntity> {
 
 	/**
 	 * The user's unique identifier.
 	 */
 	@Id
-	@SequenceGenerator(name = "USER_SEQ_GENERATOR", sequenceName = "USER_SEQ",
+	@SequenceGenerator(name = "UT_SEQ_GENERATOR", sequenceName = "UT_SEQ",
 			allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,
-			generator = "USER_SEQ_GENERATOR")
+			generator = "UT_SEQ_GENERATOR")
 	private Long id;
 
 	/**
 	 * The user's email address.
 	 */
 	@Column(unique = true, nullable = false)
-	private String username;
+	private String name;
+	
+	private boolean autoAuthorize;
 
 	/**
 	 * A list of roles assigned to the user.
 	 */
 	@ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-	@JoinTable(name = "user_role",
+	@JoinTable(name = "usertemplate_role",
 			joinColumns = {
-				@JoinColumn(name = "user_id")},
+				@JoinColumn(name = "usertemplate_id")},
 			inverseJoinColumns = {
 				@JoinColumn(name = "role_id")})
 	private List<RoleEntity> roles = new ArrayList<>();
@@ -77,76 +76,46 @@ public class UserEntity implements org.eurekaclinical.standardapis.entity.UserEn
 	 * A list of roles assigned to the user.
 	 */
 	@ManyToMany(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
-	@JoinTable(name = "user_group",
+	@JoinTable(name = "usertemplate_group",
 			joinColumns = {
-				@JoinColumn(name = "user_id")},
+				@JoinColumn(name = "usertemplate_id")},
 			inverseJoinColumns = {
 				@JoinColumn(name = "group_id")})
 	private List<GroupEntity> groups = new ArrayList<>();
 
-	/**
-	 * Create an empty User object.
-	 */
-	public UserEntity() {
-		this.roles = new ArrayList<>();
-		this.groups = new ArrayList<>();
-	}
-
-	/**
-	 * Get the user's unique identifier.
-	 *
-	 * @return A {@link Long} representing the user's unique identifier.
-	 */
 	@Override
 	public Long getId() {
 		return this.id;
 	}
 
-	/**
-	 * Set the user's unique identifier.
-	 *
-	 * @param inId A {@link Long} representing the user's unique identifier.
-	 */
 	@Override
-	public void setId(final Long inId) {
+	public void setId(Long inId) {
 		this.id = inId;
 	}
 
-	/**
-	 * Get the user's email address.
-	 *
-	 * @return A String containing the user's email address.
-	 */
 	@Override
-	public String getUsername() {
-		return this.username;
+	public void setName(String inName) {
+		this.name = inName;
 	}
 
-	/**
-	 * Set the user's email address.
-	 *
-	 * @param inUsername A String containing the user's email address.
-	 */
 	@Override
-	public void setUsername(final String inUsername) {
-		this.username = inUsername;
+	public String getName() {
+		return this.name;
 	}
 
-	/**
-	 * Get all the roles assigned to the user.
-	 *
-	 * @return A list of roles assigned to the user.
-	 */
+	public boolean isAutoAuthorize() {
+		return autoAuthorize;
+	}
+
+	public void setAutoAuthorize(boolean autoAuthorize) {
+		this.autoAuthorize = autoAuthorize;
+	}
+
 	@Override
 	public List<RoleEntity> getRoles() {
 		return new ArrayList<>(this.roles);
 	}
 
-	/**
-	 * Set the roles assigned to the current user.
-	 *
-	 * @param inRoles A list of roles to be assigned to the user.
-	 */
 	@Override
 	public void setRoles(List<RoleEntity> inRoles) {
 		if (inRoles == null) {
@@ -154,21 +123,20 @@ public class UserEntity implements org.eurekaclinical.standardapis.entity.UserEn
 		} else {
 			this.roles = new ArrayList<>(inRoles);
 		}
-		this.roles = inRoles;
 	}
-
+	
 	@Override
-	public void addRole(RoleEntity inRole) {
-		if (!this.roles.contains(inRole)) {
-			this.roles.add(inRole);
+	public void addRole(RoleEntity role) {
+		if (!this.roles.contains(role)) {
+			this.roles.add(role);
 		}
 	}
-
+	
 	@Override
-	public void removeRole(RoleEntity inRole) {
-		this.roles.remove(inRole);
+	public void removeRole(RoleEntity role) {
+		this.roles.remove(role);
 	}
-
+	
 	public List<GroupEntity> getGroups() {
 		return new ArrayList<>(groups);
 	}
@@ -180,21 +148,21 @@ public class UserEntity implements org.eurekaclinical.standardapis.entity.UserEn
 			this.groups = new ArrayList<>(inGroups);
 		}
 	}
-
-	public void addGroup(GroupEntity inGroup) {
-		if (!this.groups.contains(inGroup)) {
-			this.groups.add(inGroup);
+	
+	public void addGroup(GroupEntity group) {
+		if (!this.groups.contains(group)) {
+			this.groups.add(group);
 		}
 	}
-
-	public void removeGroup(GroupEntity inGroup) {
-		this.groups.remove(inGroup);
+	
+	public void removeGroup(GroupEntity group) {
+		this.groups.remove(group);
 	}
 
 	@Override
 	public int hashCode() {
 		int hash = 7;
-		hash = 59 * hash + Objects.hashCode(this.id);
+		hash = 79 * hash + Objects.hashCode(this.id);
 		return hash;
 	}
 
@@ -209,7 +177,7 @@ public class UserEntity implements org.eurekaclinical.standardapis.entity.UserEn
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final UserEntity other = (UserEntity) obj;
+		final UserTemplateEntity other = (UserTemplateEntity) obj;
 		if (!Objects.equals(this.id, other.id)) {
 			return false;
 		}
@@ -218,7 +186,7 @@ public class UserEntity implements org.eurekaclinical.standardapis.entity.UserEn
 
 	@Override
 	public String toString() {
-		return "UserEntity{" + "id=" + id + ", username=" + username + ", roles=" + roles + ", groups=" + groups + '}';
+		return "UserTemplateEntity{" + "id=" + id + ", name=" + name + ", autoAuthorize=" + autoAuthorize + ", roles=" + roles + ", groups=" + groups + '}';
 	}
-
+	
 }

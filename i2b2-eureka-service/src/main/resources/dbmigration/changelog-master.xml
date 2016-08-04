@@ -54,14 +54,12 @@
         <createSequence sequenceName="ROLE_SEQ"/>
         <createTable tableName="USER_ROLE">
             <column name="USER_ID" type="BIGINT">
-                <constraints nullable="false" foreignKeyName="USER_ROLE_USERS_FK"/>
+                <constraints nullable="false" foreignKeyName="USER_ROLE_USERS_FK" referencedColumnNames="ID" referencedTableName="USERS"/>
             </column>
             <column name="ROLE_ID" type="BIGINT">
-                <constraints nullable="false"/>
+                <constraints nullable="false" foreignKeyName="USER_ROLE_ROLES_FK" referencedColumnNames="ID" referencedTableName="ROLES"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseColumnNames="ROLE_ID" baseTableName="USER_ROLE" constraintName="USER_ROLE_ROLE_FK" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" referencedColumnNames="ID" referencedTableName="ROLES" referencesUniqueColumn="false"/>
-        <addForeignKeyConstraint baseColumnNames="USER_ID" baseTableName="USER_ROLE" constraintName="USER_ROLE_USER_FK" deferrable="false" initiallyDeferred="false" onDelete="RESTRICT" referencedColumnNames="ID" referencedTableName="USERS" referencesUniqueColumn="false"/>
     </changeSet>
     <changeSet author="arpost" id="2">
         <insert tableName="ROLES">
@@ -70,12 +68,7 @@
             <column name="NAME" value="admin"/>
         </insert>
         <rollback>
-            <delete tableName="ROLES">
-                <where>ID=:value</where>
-				<whereParams>
-					<param valueSequenceCurrent="ROLE_SEQ"/>
-				</whereParams>
-            </delete>
+            <delete tableName="ROLES"/>
         </rollback>
     </changeSet>
     <changeSet author="arpost" id="3">
@@ -88,13 +81,145 @@
             <column name="ROLE_ID" valueComputed="(SELECT ID FROM ROLES WHERE NAME='admin')"/>
         </insert>
 		<rollback>
-			<delete tableName="USER_ROLE">
-				<where>USER_ID = :value AND ROLE_ID = :value</where>
-				<whereParams>
-					<param valueComputed="(SELECT ID FROM USERS WHERE USERNAME='${eurekaclinical.superuser.username}')"/>
-					<param valueComputed="(SELECT ID FROM ROLES WHERE NAME='admin')"/>
-				</whereParams>
-			</delete>
+			<delete tableName="USER_ROLE"/>
 		</rollback>
     </changeSet>
+	<changeSet author="arpost" id="4">
+		<createTable tableName="I2B2DOMAINS">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" primaryKeyName="DOMAINS_PK"/>
+			</column>
+			<column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="DOMAINS_NAME_UNIQ"/>
+            </column>
+			<column name="ADMINUSERNAME" type="VARCHAR(50)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="ADMINPASSWORD" type="VARCHAR(255)">
+				<constraints nullable="false"/>
+			</column>
+			<column name="PROXYURL" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+			<column name="REDIRECTHOST" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+		</createTable>
+		<createSequence sequenceName="I2B2DOMAIN_SEQ"/>
+		<createTable tableName="I2B2PROJECTS">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" primaryKeyName="PROJECTS_PK"/>
+			</column>
+			<column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="PROJECTS_NAME_UNIQ"/>
+            </column>
+			<column name="I2B2DOMAIN_ID" type="BIGINT">
+				<constraints nullable="false" foreignKeyName="I2B2_PROJECTS_DOMAIN_FK"/>
+			</column>
+		</createTable>
+		<createSequence sequenceName="I2B2PRJ_SEQ"/>
+		<createTable tableName="GROUPS">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" primaryKeyName="GROUPS_PK"/>
+			</column>
+			<column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="GROUPS_NAME_UNIQ"/>
+            </column>
+		</createTable>
+		<createSequence sequenceName="GROUP_SEQ"/>
+		<createTable tableName="USER_GROUP">
+			<column name="USER_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="USER_GROUP_USERS_FK" referencedTableName="USERS" referencedColumnNames="ID"/>
+            </column>
+            <column name="GROUP_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="USER_GROUP_GROUPS_FK" referencedTableName="GROUPS" referencedColumnNames="ID"/>
+            </column>
+		</createTable>
+		<createTable tableName="I2B2ROLES">
+			<column name="ID" type="BIGINT">
+				<constraints nullable="false" primaryKey="true" primaryKeyName="I2B2ROLES_PK"/>
+			</column>
+			<column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="I2B2ROLES_NAME_UNIQ"/>
+            </column>
+		</createTable>
+		<createSequence sequenceName="I2B2ROLE_SEQ"/>
+		<createTable tableName="GROUP_I2B2PROJECT">
+			<column name="GROUP_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="GROUP_I2B2PRJ_GROUPS_FK" referencedTableName="GROUPS" referencedColumnNames="ID"/>
+            </column>
+            <column name="I2B2PROJECT_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="GROUP_I2B2PRJ_I2B2PRJS_FK" referencedTableName="I2B2PROJECTS" referencedColumnNames="ID"/>
+            </column>
+		</createTable>
+		<createTable tableName="GROUP_I2B2ROLE">
+			<column name="GROUP_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="GROUP_I2B2ROLE_GROUPS_FK" referencedColumnNames="ID" referencedTableName="GROUPS"/>
+            </column>
+            <column name="I2B2ROLE_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="GROUP_I2B2ROLE_I2B2ROLES_FK" referencedColumnNames="ID" referencedTableName="I2B2ROLES"/>
+            </column>
+		</createTable>
+		<createTable tableName="USERTEMPLATES">
+			<column name="ID" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="UT_PK"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="UT_NAME_UNIQ"/>
+            </column>
+			<column name="AUTOAUTHORIZE" type="BOOLEAN">
+				<constraints nullable="false"/>
+			</column>
+		</createTable>
+		<createSequence sequenceName="UT_SEQ"/>
+		<createTable tableName="USERTEMPLATE_ROLE">
+            <column name="USERTEMPLATE_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="UT_ROLE_USERTEMPLATES_FK" referencedColumnNames="ID" referencedTableName="USERTEMPLATES"/>
+            </column>
+            <column name="ROLE_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="UT_ROLE_ROLES_FK" referencedColumnNames="ID" referencedTableName="ROLES"/>
+            </column>
+        </createTable>
+		<createTable tableName="USERTEMPLATE_GROUP">
+            <column name="USERTEMPLATE_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="UT_GROUP_USERTEMPLATES_FK" referencedColumnNames="ID" referencedTableName="USERTEMPLATES"/>
+            </column>
+            <column name="GROUP_ID" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="UT_GROUP_GROUPS_FK" referencedColumnNames="ID" referencedTableName="GROUPS"/>
+            </column>
+        </createTable>
+	</changeSet>
+	<changeSet author="arpost" id="5">
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="DATA_OBFSC"/>
+		</insert>
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="DATA_AGG"/>
+		</insert>
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="DATA_LDS"/>
+		</insert>
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="DATA_DEID"/>
+		</insert>
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="DATA_PROT"/>
+		</insert>
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="EDITOR"/>
+		</insert>
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="MANAGER"/>
+		</insert>
+		<rollback>
+			<delete tableName="I2B2ROLES"/>
+		</rollback>
+	</changeSet>
 </databaseChangeLog>

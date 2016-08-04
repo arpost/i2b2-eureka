@@ -20,12 +20,13 @@ package org.eurekaclinical.i2b2.entity;
  * #L%
  */
 
+import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
@@ -35,40 +36,29 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name = "roles")
-public class RoleEntity implements org.eurekaclinical.standardapis.entity.RoleEntity {
+@Table(name = "i2b2roles")
+public class I2b2RoleEntity implements org.eurekaclinical.standardapis.entity.Entity {
 
     /**
      * The role's unique identifier.
      */
     @Id
-    @SequenceGenerator(name = "ROLE_SEQ_GENERATOR", sequenceName = "ROLE_SEQ",
+    @SequenceGenerator(name = "I2B2ROLE_SEQ_GENERATOR", sequenceName = "I2B2ROLE_SEQ",
             allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE,
-            generator = "ROLE_SEQ_GENERATOR")
+            generator = "I2B2ROLE_SEQ_GENERATOR")
     private Long id;
     /**
      * The role's name.
      */
     @Column(unique = true, nullable = false)
     private String name;
-    /**
-     * Is this role a default role? Default roles are assigned to all new users.
-     */
-    private boolean defaultRole;
-
-    /**
-     * Create an empty role.
-     */
-    public RoleEntity() {
-    }
-
+	
     /**
      * Get the role's identification number.
      *
      * @return A {@link Long} representing the role's id.
      */
-    @Override
     public Long getId() {
         return this.id;
     }
@@ -78,7 +68,6 @@ public class RoleEntity implements org.eurekaclinical.standardapis.entity.RoleEn
      *
      * @param inId The number representing the role's id.
      */
-    @Override
     public void setId(Long inId) {
         this.id = inId;
     }
@@ -88,7 +77,6 @@ public class RoleEntity implements org.eurekaclinical.standardapis.entity.RoleEn
      *
      * @return A String containing the role's name.
      */
-    @Override
     public String getName() {
         return this.name;
     }
@@ -98,59 +86,38 @@ public class RoleEntity implements org.eurekaclinical.standardapis.entity.RoleEn
      *
      * @param inName A string containing the role's name.
      */
-    @Override
     public void setName(String inName) {
         this.name = inName;
     }
 
-    /**
-     * Is this role a default role?
-     *
-     * @return True if the role is a default role, false otherwise.
-     */
-    @Override
-    public boolean isDefaultRole() {
-        return this.defaultRole;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 59 * hash + Objects.hashCode(this.id);
+		return hash;
+	}
 
-    /**
-     * Set the role's default flag.
-     *
-     * @param inDefaultRole True or False, True indicating a default role, False
-     * indicating a non-default role.
-     */
-    @Override
-    public void setDefaultRole(boolean inDefaultRole) {
-        this.defaultRole = inDefaultRole;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof RoleEntity)) {
-            return false;
-        }
-
-        RoleEntity role = (RoleEntity) o;
-
-        if (!id.equals(role.id)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id.hashCode();
-        return result;
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final I2b2RoleEntity other = (I2b2RoleEntity) obj;
+		if (!Objects.equals(this.id, other.id)) {
+			return false;
+		}
+		return true;
+	}
 
     @Override
     public String toString() {
-        return "RoleEntity{" + "id=" + id + ", name=" + name + ", defaultRole=" + defaultRole + '}';
+        return "I2b2RoleEntity{" + "id=" + id + ", name=" + name + '}';
     }
 
 }

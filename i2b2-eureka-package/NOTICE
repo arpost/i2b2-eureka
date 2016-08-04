@@ -22,9 +22,11 @@ This project includes:
   Core Hibernate O/RM functionality under GNU Lesser General Public License
   Data Mapper for Jackson under The Apache Software License, Version 2.0
   dom4j under BSD License
+  Eureka Clinical i2b2 Integration Client under Apache License, Version 2.0
   Eureka! Client under Apache License, Version 2.0
   Eureka! Clinical Common under Apache License, Version 2.0
   Eureka! Clinical Standard APIs under Apache License, Version 2.0
+  Eureka! Clinical User Agreement Client under Apache License, Version 2.0
   FreeMarker under Apache License, Version 2.0
   Google Guice - Core Library under The Apache Software License, Version 2.0
   Google Guice - Extensions - JNDI under The Apache Software License, Version 2.0

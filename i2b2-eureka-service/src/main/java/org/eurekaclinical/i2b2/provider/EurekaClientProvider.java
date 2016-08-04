@@ -34,14 +34,14 @@ import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
  * @author Andrew Post
  */
 @Singleton
-public class ServicesClientProvider implements Provider<EurekaClient> {
+public class EurekaClientProvider implements Provider<EurekaClient> {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(ServicesClientProvider.class);
+			.getLogger(EurekaClientProvider.class);
 	private final EurekaClient client;
 
 	@Inject
-	public ServicesClientProvider(I2b2EurekaServicesProperties inProperties) {
+	public EurekaClientProvider(I2b2EurekaServicesProperties inProperties) {
 		LOGGER.debug("service url = {}", inProperties.getServiceUrl());
 		this.client = new EurekaClient(inProperties.getServiceUrl());
 	}

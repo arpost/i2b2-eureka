@@ -20,7 +20,6 @@ package org.eurekaclinical.i2b2.resource;
  * #L%
  */
 import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
-import org.eurekaclinical.i2b2.client.xml.I2b2XmlException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -72,7 +71,7 @@ public class PatientSetResource {
 	public Response doSend(
 			@QueryParam("resultInstanceId") String resultInstanceId, 
 			@QueryParam("action") String actionId) 
-			throws I2b2XmlException, ClientException {
+			throws ClientException {
 		InputStream inputStream = null;
 		try {
 			JobSpec jobSpec = new JobSpec();

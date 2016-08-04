@@ -25,38 +25,41 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
-import org.eurekaclinical.standardapis.dao.UserDao;
 import org.eurekaclinical.standardapis.dao.RoleDao;
 import org.eurekaclinical.common.resource.AbstractUserResource;
+import org.eurekaclinical.common.resource.AbstractUserTemplateResource;
 import org.eurekaclinical.i2b2.entity.GroupEntity;
 import org.eurekaclinical.i2b2.entity.RoleEntity;
 import org.eurekaclinical.i2b2.entity.UserEntity;
+import org.eurekaclinical.i2b2.entity.UserTemplateEntity;
 import org.eurekaclinical.standardapis.dao.GroupDao;
 import org.eurekaclinical.i2b2.integration.client.comm.I2b2IntegrationUser;
+import org.eurekaclinical.i2b2.integration.client.comm.I2b2IntegrationUserTemplate;
+import org.eurekaclinical.standardapis.dao.UserTemplateDao;
 
 /**
  *
  * @author Andrew Post
  */
-@Path("/protected/users")
+@Path("/protected/usertemplates")
 @Transactional
-public class UserResource extends AbstractUserResource<I2b2IntegrationUser, UserEntity, RoleEntity> {
+public class UserTemplateResource extends AbstractUserTemplateResource<I2b2IntegrationUserTemplate, RoleEntity, UserTemplateEntity> {
 
 	private final RoleDao<RoleEntity> roleDao;
 	private final GroupDao<GroupEntity> groupDao;
 
 	@Inject
-	public UserResource(UserDao<UserEntity> inUserDao, RoleDao<RoleEntity> inRoleDao, GroupDao<GroupEntity> inGroupDao) {
+	public UserTemplateResource(UserTemplateDao<UserTemplateEntity> inUserDao, RoleDao<RoleEntity> inRoleDao, GroupDao<GroupEntity> inGroupDao) {
 		super(inUserDao);
 		this.roleDao = inRoleDao;
 		this.groupDao = inGroupDao;
 	}
 
 	@Override
-	protected I2b2IntegrationUser toComm(UserEntity userEntity, HttpServletRequest req) {
-		I2b2IntegrationUser user = new I2b2IntegrationUser();
+	protected I2b2IntegrationUserTemplate toComm(UserTemplateEntity userEntity, HttpServletRequest req) {
+		I2b2IntegrationUserTemplate user = new I2b2IntegrationUserTemplate();
 		user.setId(userEntity.getId());
-		user.setUsername(userEntity.getUsername());
+		user.setName(userEntity.getName());
 		List<Long> roles = new ArrayList<>();
 		for (RoleEntity roleEntity : userEntity.getRoles()) {
 			roles.add(roleEntity.getId());
@@ -71,10 +74,10 @@ public class UserResource extends AbstractUserResource<I2b2IntegrationUser, User
 	}
 
 	@Override
-	protected UserEntity toEntity(I2b2IntegrationUser user) {
-		UserEntity userEntity = new UserEntity();
+	protected UserTemplateEntity toEntity(I2b2IntegrationUserTemplate user) {
+		UserTemplateEntity userEntity = new UserTemplateEntity();
 		userEntity.setId(user.getId());
-		userEntity.setUsername(user.getUsername());
+		userEntity.setName(user.getName());
 		List<RoleEntity> roleEntities = this.roleDao.getAll();
 		for (Long roleId : user.getRoles()) {
 			for (RoleEntity roleEntity : roleEntities) {
