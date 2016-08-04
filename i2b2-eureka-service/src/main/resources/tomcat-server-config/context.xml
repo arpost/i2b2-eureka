@@ -24,7 +24,7 @@
     <!-- Default set of monitored resources -->
     <WatchedResource>WEB-INF/web.xml</WatchedResource>
 
-    <Resource name="jdbc/EurekaClinicalI2b2Service" auth="Container"
+    <Resource name="jdbc/EurekaClinicalI2b2IntegrationService" auth="Container"
                   type="javax.sql.DataSource" driverClassName="org.h2.Driver"
                   factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
                   url="jdbc:h2:file:${basedir}/target/db/db"
