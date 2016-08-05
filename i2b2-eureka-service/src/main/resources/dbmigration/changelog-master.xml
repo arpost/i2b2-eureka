@@ -192,6 +192,10 @@
 	<changeSet author="arpost" id="5">
 		<insert tableName="I2B2ROLES">
 			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
+			<column name="NAME" value="USER"/>
+		</insert>
+		<insert tableName="I2B2ROLES">
+			<column name="ID" valueSequenceNext="I2B2ROLE_SEQ"/>
 			<column name="NAME" value="DATA_OBFSC"/>
 		</insert>
 		<insert tableName="I2B2ROLES">

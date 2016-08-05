@@ -40,7 +40,7 @@ public class I2b2RoleResource extends AbstractNamedReadOnlyResource<I2b2RoleEnti
 
     @Inject
     public I2b2RoleResource(I2b2RoleDao<I2b2RoleEntity> inRoleDao) {
-		super(inRoleDao);
+		super(inRoleDao, false);
     }
 
 	@Override

@@ -100,7 +100,7 @@ public class I2b2UserResource {
 			throw new HttpStatusException(Response.Status.NOT_FOUND, ex);
 		}
 	}
-
+	
 	@POST
 	@Path("/i2b2users/auto")
 	public Response autoCreate(@Context HttpServletRequest req) {
