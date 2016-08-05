@@ -20,19 +20,31 @@ package org.eurekaclinical.i2b2.resource;
  * #L%
  */
 import com.google.inject.persist.Transactional;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import org.eurekaclinical.common.comm.clients.ClientException;
 import org.eurekaclinical.standardapis.dao.UserDao;
 import org.eurekaclinical.standardapis.dao.RoleDao;
 import org.eurekaclinical.common.resource.AbstractUserResource;
 import org.eurekaclinical.i2b2.entity.GroupEntity;
 import org.eurekaclinical.i2b2.entity.RoleEntity;
 import org.eurekaclinical.i2b2.entity.UserEntity;
+import org.eurekaclinical.i2b2.entity.UserTemplateEntity;
 import org.eurekaclinical.standardapis.dao.GroupDao;
 import org.eurekaclinical.i2b2.integration.client.comm.I2b2IntegrationUser;
+import org.eurekaclinical.standardapis.dao.UserTemplateDao;
+import org.eurekaclinical.standardapis.exception.HttpStatusException;
+import org.jasig.cas.client.authentication.AttributePrincipal;
 
 /**
  *
@@ -44,12 +56,67 @@ public class UserResource extends AbstractUserResource<I2b2IntegrationUser, User
 
 	private final RoleDao<RoleEntity> roleDao;
 	private final GroupDao<GroupEntity> groupDao;
+	private final UserTemplateDao<UserTemplateEntity> userTemplateDao;
+	private final UserDao<UserEntity> userDao;
 
 	@Inject
-	public UserResource(UserDao<UserEntity> inUserDao, RoleDao<RoleEntity> inRoleDao, GroupDao<GroupEntity> inGroupDao) {
+	public UserResource(UserDao<UserEntity> inUserDao, 
+			RoleDao<RoleEntity> inRoleDao, 
+			GroupDao<GroupEntity> inGroupDao,
+			UserTemplateDao<UserTemplateEntity> inUserTemplateDao) {
 		super(inUserDao);
+		this.userDao = inUserDao;
 		this.roleDao = inRoleDao;
 		this.groupDao = inGroupDao;
+		this.userTemplateDao = inUserTemplateDao;
+	}
+	
+	@GET
+	@Path("/auto")
+	@Produces(MediaType.APPLICATION_JSON)
+	public I2b2IntegrationUser createOrGetUserAuto(@Context HttpServletRequest req) {
+		return toComm(createOrGetUserEntity(req), req);
+	}
+	
+	@POST
+	@Path("/auto")
+	public Response createUserAuto(@Context HttpServletRequest req) {
+		return Response.created(URI.create("/" + createOrGetUserEntity(req).getId())).build();
+	}
+	
+	private UserEntity createOrGetUserEntity(HttpServletRequest req) {
+		AttributePrincipal userPrincipal = (AttributePrincipal) req.getUserPrincipal();
+        boolean autoAuthorizationPermitted = true;
+        if (autoAuthorizationPermitted) {
+            String remoteUser = req.getRemoteUser();
+            if (remoteUser != null) {
+				UserEntity user = this.userDao.getByName(remoteUser);
+                if (this.userDao.getByName(remoteUser) == null) {
+					UserTemplateEntity autoAuthorizationTemplate = this.userTemplateDao.getAutoAuthorizationTemplate();
+                    if (autoAuthorizationTemplate != null) {
+                        user = toUserEntity(autoAuthorizationTemplate, remoteUser);
+                        this.userDao.create(user);
+						return user;
+                    } else {
+						throw new HttpStatusException(Response.Status.FORBIDDEN);
+					}
+                } else {
+					return user;
+				}
+            } else {
+				throw new HttpStatusException(Response.Status.UNAUTHORIZED);
+			}
+        } else {
+			throw new HttpStatusException(Response.Status.FORBIDDEN);
+		}
+	}
+	
+	private UserEntity toUserEntity(UserTemplateEntity userTemplate, String username) {
+		UserEntity user = new UserEntity();
+		user.setUsername(username);
+		user.setGroups(userTemplate.getGroups());
+		user.setRoles(userTemplate.getRoles());
+		return user;
 	}
 
 	@Override

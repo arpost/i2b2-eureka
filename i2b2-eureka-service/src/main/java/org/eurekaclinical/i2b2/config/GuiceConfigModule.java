@@ -41,12 +41,10 @@ import org.eurekaclinical.i2b2.entity.I2b2RoleEntity;
 import org.eurekaclinical.i2b2.entity.RoleEntity;
 import org.eurekaclinical.i2b2.entity.UserEntity;
 import org.eurekaclinical.i2b2.entity.UserTemplateEntity;
-import org.eurekaclinical.i2b2.filter.I2b2AutoAuthorizationFilter;
 import org.eurekaclinical.standardapis.dao.GroupDao;
 import org.eurekaclinical.standardapis.dao.RoleDao;
 import org.eurekaclinical.standardapis.dao.UserDao;
 import org.eurekaclinical.standardapis.dao.UserTemplateDao;
-import org.eurekaclinical.common.filter.AutoAuthorizationFilter;
 import org.eurekaclinical.i2b2.client.I2b2ClientFactory;
 import org.eurekaclinical.i2b2.client.I2b2ClientFactoryImpl;
 import org.eurekaclinical.i2b2.client.I2b2UserSetterFactory;
@@ -77,6 +75,5 @@ public class GuiceConfigModule extends AbstractModule {
 		bind(new TypeLiteral<I2b2RoleDao<I2b2RoleEntity>>() {}).to(JpaI2b2RoleDao.class);
 		bind(I2b2RoleDao.class).to(JpaI2b2RoleDao.class);
 		bind(new TypeLiteral<I2b2DomainDao<I2b2DomainEntity>>() {}).to(JpaI2b2DomainDao.class);
-		bind(AutoAuthorizationFilter.class).to(I2b2AutoAuthorizationFilter.class);
 	}
 }
