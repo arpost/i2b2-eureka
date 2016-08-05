@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.eurekaclinical</groupId>
 		<artifactId>i2b2-eureka</artifactId>
-		<version>1.0-Alpha-11-SNAPSHOT</version>
+		<version>1.0-Alpha-11</version>
 	</parent>
 
 	<artifactId>i2b2-eureka-package</artifactId>
@@ -15,7 +15,7 @@
 	<description>A project to package up all i2b2-Eureka integration projects.</description>
 	
 	<properties>
-		<i2b2-eureka-version>1.0-Alpha-11-SNAPSHOT</i2b2-eureka-version>
+		<i2b2-eureka-version>1.0-Alpha-11</i2b2-eureka-version>
 	</properties>
 
 	<dependencies>
