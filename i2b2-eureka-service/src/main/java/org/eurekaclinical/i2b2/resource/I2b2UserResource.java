@@ -32,6 +32,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import org.arp.javautil.password.PasswordGenerator;
+import org.arp.javautil.password.PasswordGeneratorImpl;
 import org.eurekaclinical.common.comm.clients.ClientException;
 import org.eurekaclinical.i2b2.client.I2b2Client;
 import org.eurekaclinical.i2b2.client.I2b2ClientFactory;
@@ -115,6 +117,7 @@ public class I2b2UserResource {
 			if (userTemplate != null
 					&& (this.properties.getUserAgreementUrl() == null
 					|| this.userAgreementClient.getUserAgreementStatus() != null)) {
+				PasswordGenerator passwordGenerator = new PasswordGeneratorImpl();
 				for (GroupEntity group : userTemplate.getGroups()) {
 					for (I2b2ProjectEntity project : group.getI2b2Projects()) {
 						I2b2DomainEntity domain = project.getI2b2Domain();
@@ -125,7 +128,7 @@ public class I2b2UserResource {
 						authMetadata.setUsername(domain.getAdminUsername());
 						authMetadata.setPassword(domain.getAdminPassword());
 						if (domainCache.add(domain.getName())) {
-							userSetter.setUser(authMetadata, username, null, fullName, email, false);
+							userSetter.setUser(authMetadata, username, passwordGenerator.generate(), fullName, email, false);
 						}
 						try (I2b2Client i2b2Client = this.i2b2ClientFactory.getInstance(authMetadata)) {
 							for (I2b2RoleEntity i2b2Role : group.getI2b2Roles()) {
