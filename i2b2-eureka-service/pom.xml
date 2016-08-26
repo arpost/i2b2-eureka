@@ -18,9 +18,9 @@
 	
 	<properties>
 		<ec-i2b2-client-version>1.0-Alpha-6</ec-i2b2-client-version>
-		<ec-i2b2-integration-client-version>1.0-Alpha-4</ec-i2b2-integration-client-version>
-		<eureka-client-version>1.0-Alpha-4</eureka-client-version>
-		<ec-user-agreement-client-version>1.0-Alpha-3</ec-user-agreement-client-version>
+		<ec-i2b2-integration-client-version>1.0-Alpha-5</ec-i2b2-integration-client-version>
+		<eureka-client-version>1.0-Alpha-5</eureka-client-version>
+		<ec-user-agreement-client-version>1.0-Alpha-6</ec-user-agreement-client-version>
 	</properties>
 	
 	<build>

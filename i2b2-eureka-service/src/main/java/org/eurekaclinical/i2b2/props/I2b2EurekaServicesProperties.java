@@ -51,4 +51,9 @@ public class I2b2EurekaServicesProperties extends CasEurekaClinicalProperties {
 		return this.getValue("eurekaclinical.useragreement.url");
 	}
 
+	@Override
+	public String getUrl() {
+		return this.getValue("eurekaclinical.i2b2integrationservice.url", "https://localhost:8443/i2b2-eureka-service");
+	}
+	
 }
