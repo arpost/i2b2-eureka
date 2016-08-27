@@ -103,6 +103,14 @@ public class I2b2UserResource {
 		}
 	}
 	
+	/**
+	 * Automatically creates user and role records in i2b2's PM cell, if the
+	 * user is authorized for eurekaclinical-i2b2-integration and is a member
+	 * of a group that has an associated i2b2 project.
+	 * 
+	 * @param req the HTTP servlet request object.
+	 * @return the response object.
+	 */
 	@POST
 	@Path("/i2b2users/auto")
 	public Response autoCreate(@Context HttpServletRequest req) {
