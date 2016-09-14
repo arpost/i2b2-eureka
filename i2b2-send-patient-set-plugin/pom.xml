@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.eurekaclinical</groupId>
 		<artifactId>i2b2-eureka</artifactId>
-		<version>1.0-Alpha-15</version>
+		<version>1.0-Alpha-16-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>i2b2-send-patient-set-plugin</artifactId>
