@@ -170,6 +170,7 @@
 			<column name="AUTOAUTHORIZE" type="BOOLEAN">
 				<constraints nullable="false"/>
 			</column>
+			<column name="CRITERIA" type="VARCHAR(255)"/>
 		</createTable>
 		<createSequence sequenceName="UT_SEQ"/>
 		<createTable tableName="USERTEMPLATE_ROLE">

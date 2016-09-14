@@ -60,6 +60,8 @@ public class UserTemplateEntity implements org.eurekaclinical.standardapis.entit
 	private String name;
 	
 	private boolean autoAuthorize;
+	
+	private String criteria;
 
 	/**
 	 * A list of roles assigned to the user.
@@ -109,6 +111,29 @@ public class UserTemplateEntity implements org.eurekaclinical.standardapis.entit
 
 	public void setAutoAuthorize(boolean autoAuthorize) {
 		this.autoAuthorize = autoAuthorize;
+	}
+
+	/**
+	 * Gets the criteria for triggering auto-authorization. May be 
+	 * <code>null</code>, which means that auto-authorization will always be 
+	 * triggered when requested. The criteria are expressed as Freemarker 
+	 * Template Language expression
+	 * @return the criteria expression string.
+	 */
+	public String getCriteria() {
+		return criteria;
+	}
+
+	/**
+	 * Sets criteria for triggering auto-authorization. May be 
+	 * <code>null</code>, which means that auto-authorization will always be 
+	 * triggered when requested.
+	 * 
+	 * @param criteria the criteria for triggering auto-authorization, 
+	 * expressed as a Freemarker Template Language expression.
+	 */
+	public void setCriteria(String criteria) {
+		this.criteria = criteria;
 	}
 
 	@Override
@@ -166,6 +191,13 @@ public class UserTemplateEntity implements org.eurekaclinical.standardapis.entit
 		return hash;
 	}
 
+	/**
+	 * Equal to another object of the same class if their id values are equal.
+	 * 
+	 * @param obj another object.
+	 * 
+	 * @return <code>true</code> if equal, <code>false</code> if not.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -186,7 +218,7 @@ public class UserTemplateEntity implements org.eurekaclinical.standardapis.entit
 
 	@Override
 	public String toString() {
-		return "UserTemplateEntity{" + "id=" + id + ", name=" + name + ", autoAuthorize=" + autoAuthorize + ", roles=" + roles + ", groups=" + groups + '}';
+		return "UserTemplateEntity{" + "id=" + id + ", name=" + name + ", autoAuthorize=" + autoAuthorize + ", criteria=" + criteria + ", roles=" + roles + ", groups=" + groups + '}';
 	}
 	
 }

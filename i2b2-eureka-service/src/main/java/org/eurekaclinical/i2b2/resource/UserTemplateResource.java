@@ -26,14 +26,11 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import org.eurekaclinical.standardapis.dao.RoleDao;
-import org.eurekaclinical.common.resource.AbstractUserResource;
 import org.eurekaclinical.common.resource.AbstractUserTemplateResource;
 import org.eurekaclinical.i2b2.entity.GroupEntity;
 import org.eurekaclinical.i2b2.entity.RoleEntity;
-import org.eurekaclinical.i2b2.entity.UserEntity;
 import org.eurekaclinical.i2b2.entity.UserTemplateEntity;
 import org.eurekaclinical.standardapis.dao.GroupDao;
-import org.eurekaclinical.i2b2.integration.client.comm.I2b2IntegrationUser;
 import org.eurekaclinical.i2b2.integration.client.comm.I2b2IntegrationUserTemplate;
 import org.eurekaclinical.standardapis.dao.UserTemplateDao;
 
@@ -56,45 +53,49 @@ public class UserTemplateResource extends AbstractUserTemplateResource<I2b2Integ
 	}
 
 	@Override
-	protected I2b2IntegrationUserTemplate toComm(UserTemplateEntity userEntity, HttpServletRequest req) {
-		I2b2IntegrationUserTemplate user = new I2b2IntegrationUserTemplate();
-		user.setId(userEntity.getId());
-		user.setName(userEntity.getName());
+	protected I2b2IntegrationUserTemplate toComm(UserTemplateEntity templateEntity, HttpServletRequest req) {
+		I2b2IntegrationUserTemplate template = new I2b2IntegrationUserTemplate();
+		template.setId(templateEntity.getId());
+		template.setName(templateEntity.getName());
 		List<Long> roles = new ArrayList<>();
-		for (RoleEntity roleEntity : userEntity.getRoles()) {
+		for (RoleEntity roleEntity : templateEntity.getRoles()) {
 			roles.add(roleEntity.getId());
 		}
-		user.setRoles(roles);
+		template.setRoles(roles);
 		List<Long> groups = new ArrayList<>();
-		for (GroupEntity groupEntity : userEntity.getGroups()) {
+		for (GroupEntity groupEntity : templateEntity.getGroups()) {
 			groups.add(groupEntity.getId());
 		}
-		user.setGroups(groups);
-		return user;
+		template.setGroups(groups);
+		template.setAutoAuthorize(templateEntity.isAutoAuthorize());
+		template.setCriteria(templateEntity.getCriteria());
+		return template;
 	}
 
 	@Override
-	protected UserTemplateEntity toEntity(I2b2IntegrationUserTemplate user) {
-		UserTemplateEntity userEntity = new UserTemplateEntity();
-		userEntity.setId(user.getId());
-		userEntity.setName(user.getName());
+	protected UserTemplateEntity toEntity(I2b2IntegrationUserTemplate template) {
+		UserTemplateEntity templateEntity = new UserTemplateEntity();
+		templateEntity.setId(template.getId());
+		templateEntity.setName(template.getName());
 		List<RoleEntity> roleEntities = this.roleDao.getAll();
-		for (Long roleId : user.getRoles()) {
+		for (Long roleId : template.getRoles()) {
 			for (RoleEntity roleEntity : roleEntities) {
 				if (roleEntity.getId().equals(roleId)) {
-					userEntity.addRole(roleEntity);
+					templateEntity.addRole(roleEntity);
 				}
 			}
 		}
 		List<GroupEntity> groupEntities = this.groupDao.getAll();
-		for (Long groupId : user.getGroups()) {
+		for (Long groupId : template.getGroups()) {
 			for (GroupEntity groupEntity : groupEntities) {
 				if (groupEntity.getId().equals(groupId)) {
-					userEntity.addGroup(groupEntity);
+					templateEntity.addGroup(groupEntity);
 				}
 			}
 		}
-		return userEntity;
+		templateEntity.setAutoAuthorize(template.isAutoAuthorize());
+		templateEntity.setCriteria(template.getCriteria());
+		return templateEntity;
 	}
 
 }
