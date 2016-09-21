@@ -23,6 +23,7 @@ package org.eurekaclinical.i2b2.resource;
 import com.google.inject.persist.Transactional;
 import java.net.URI;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -42,10 +43,12 @@ import org.eurekaclinical.i2b2.client.I2b2UserSetter;
 import org.eurekaclinical.i2b2.client.I2b2UserSetterFactory;
 import org.eurekaclinical.i2b2.client.comm.I2b2AuthMetadata;
 import org.eurekaclinical.i2b2.dao.I2b2DomainDao;
+import org.eurekaclinical.i2b2.dao.UserDao;
 import org.eurekaclinical.i2b2.entity.GroupEntity;
 import org.eurekaclinical.i2b2.entity.I2b2DomainEntity;
 import org.eurekaclinical.i2b2.entity.I2b2ProjectEntity;
 import org.eurekaclinical.i2b2.entity.I2b2RoleEntity;
+import org.eurekaclinical.i2b2.entity.UserEntity;
 import org.eurekaclinical.i2b2.entity.UserTemplateEntity;
 import org.eurekaclinical.i2b2.integration.client.comm.I2b2User;
 import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
@@ -68,6 +71,7 @@ public class I2b2UserResource {
 	private final EurekaClinicalUserAgreementClient userAgreementClient;
 	private final UserTemplateDao<UserTemplateEntity> userTemplateDao;
 	private final I2b2DomainDao<I2b2DomainEntity> domainDao;
+	private final UserDao userDao;
 
 	@Inject
 	public I2b2UserResource(I2b2ClientFactory i2b2ClientFactory,
@@ -75,13 +79,15 @@ public class I2b2UserResource {
 			I2b2EurekaServicesProperties properties,
 			EurekaClinicalUserAgreementClient userAgreementClient,
 			UserTemplateDao<UserTemplateEntity> inUserTemplateDao,
-			I2b2DomainDao<I2b2DomainEntity> inDomainDao) {
+			I2b2DomainDao<I2b2DomainEntity> inDomainDao,
+			UserDao inUserDao) {
 		this.i2b2ClientFactory = i2b2ClientFactory;
 		this.i2b2UserSetterFactory = i2b2UserSetterFactory;
 		this.properties = properties;
 		this.userAgreementClient = userAgreementClient;
 		this.userTemplateDao = inUserTemplateDao;
 		this.domainDao = inDomainDao;
+		this.userDao = inUserDao;
 	}
 
 	@GET
@@ -121,7 +127,17 @@ public class I2b2UserResource {
 		Set<String> domainCache = new HashSet<>();
 		I2b2UserSetter userSetter = this.i2b2UserSetterFactory.getInstance();
 		try {
-			UserTemplateEntity userTemplate = this.userTemplateDao.getAutoAuthorizationTemplate();
+			UserTemplateEntity userTemplate = null;
+			List<UserTemplateEntity> userTemplates = this.userTemplateDao.getAll();
+			UserEntity user = this.userDao.getByName(username);
+			TOP_LEVEL: for (UserTemplateEntity ute : userTemplates) {
+				for (GroupEntity ge : ute.getGroups()) {
+					if (user.getGroups().contains(ge)) {
+						userTemplate = ute;
+						break TOP_LEVEL;
+					}
+				}
+			}
 			if (userTemplate != null
 					&& (this.properties.getUserAgreementUrl() == null
 					|| this.userAgreementClient.getUserAgreementStatus() != null)) {

@@ -74,6 +74,7 @@ public class GuiceConfigModule extends AbstractModule {
 		bind(new TypeLiteral<I2b2ProjectDao<I2b2ProjectEntity>>() {}).to(JpaI2b2ProjectDao.class);
 		bind(new TypeLiteral<I2b2RoleDao<I2b2RoleEntity>>() {}).to(JpaI2b2RoleDao.class);
 		bind(I2b2RoleDao.class).to(JpaI2b2RoleDao.class);
+		bind(org.eurekaclinical.i2b2.dao.UserDao.class).to(JpaUserDao.class);
 		bind(new TypeLiteral<I2b2DomainDao<I2b2DomainEntity>>() {}).to(JpaI2b2DomainDao.class);
 	}
 }
