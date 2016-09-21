@@ -31,7 +31,7 @@ import org.eurekaclinical.i2b2.entity.UserEntity;
  *
  * @author Andrew Post
  */
-public class JpaUserDao extends org.eurekaclinical.standardapis.dao.AbstractJpaUserDao<UserEntity> {
+public class JpaUserDao extends org.eurekaclinical.standardapis.dao.AbstractJpaUserDao<UserEntity> implements UserDao {
 
     /**
      * Create an object with the give entity manager.
