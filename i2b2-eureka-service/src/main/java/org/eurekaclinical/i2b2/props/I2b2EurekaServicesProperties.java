@@ -50,6 +50,10 @@ public class I2b2EurekaServicesProperties extends CasEurekaClinicalProperties {
 	public String getUserAgreementUrl() {
 		return this.getValue("eurekaclinical.useragreement.url");
 	}
+	
+	public String getCasEmailAttribute() {
+		return this.getValue("cas.attribute.email");
+	}
 
 	@Override
 	public String getUrl() {
