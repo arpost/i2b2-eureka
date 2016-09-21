@@ -117,7 +117,7 @@ public class I2b2UserResource {
 		AttributePrincipal userPrincipal = (AttributePrincipal) req.getUserPrincipal();
 		String username = userPrincipal.getName();
 		String fullName = username;
-		String email = null;
+		String email = (String) userPrincipal.getAttributes().get(this.properties.getCasEmailAttribute());
 		Set<String> domainCache = new HashSet<>();
 		I2b2UserSetter userSetter = this.i2b2UserSetterFactory.getInstance();
 		try {
