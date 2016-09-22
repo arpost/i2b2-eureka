@@ -20,10 +20,20 @@ package org.eurekaclinical.i2b2.dao;
  * #L%
  */
 
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.ListJoin;
+import javax.persistence.criteria.Root;
+import org.eurekaclinical.i2b2.entity.GroupEntity;
+import org.eurekaclinical.i2b2.entity.GroupEntity_;
 import org.eurekaclinical.i2b2.entity.I2b2ProjectEntity;
+import org.eurekaclinical.i2b2.entity.UserEntity;
+import org.eurekaclinical.i2b2.entity.UserEntity_;
 import org.eurekaclinical.standardapis.dao.GenericDao;
 
 
@@ -50,4 +60,20 @@ public class JpaI2b2ProjectDao extends GenericDao<I2b2ProjectEntity, Long> imple
 		return getUniqueByAttribute("name", name);
 	}
 	
+	@Override
+	public List<I2b2ProjectEntity> getI2b2ProjectsForUser(String username) {
+		EntityManager entityManager = this.getEntityManager();
+		
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<I2b2ProjectEntity> criteriaQuery = builder.createQuery(I2b2ProjectEntity.class);
+		Root<UserEntity> userEntityRoot = criteriaQuery.from(UserEntity.class);
+		ListJoin<UserEntity, GroupEntity> group = userEntityRoot.join(UserEntity_.groups);
+		ListJoin<GroupEntity, I2b2ProjectEntity> i2b2Project = group.join(GroupEntity_.i2b2Projects);
+		criteriaQuery.select(i2b2Project).distinct(true);
+		criteriaQuery.where(builder.equal(userEntityRoot.get(UserEntity_.username), username));
+		
+        TypedQuery<I2b2ProjectEntity> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
+	}
+
 }

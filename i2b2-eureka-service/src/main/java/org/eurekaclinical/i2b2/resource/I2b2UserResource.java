@@ -19,11 +19,9 @@ package org.eurekaclinical.i2b2.resource;
  * limitations under the License.
  * #L%
  */
-
 import com.google.inject.persist.Transactional;
 import java.net.URI;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -43,16 +41,13 @@ import org.eurekaclinical.i2b2.client.I2b2UserSetter;
 import org.eurekaclinical.i2b2.client.I2b2UserSetterFactory;
 import org.eurekaclinical.i2b2.client.comm.I2b2AuthMetadata;
 import org.eurekaclinical.i2b2.dao.I2b2DomainDao;
-import org.eurekaclinical.i2b2.dao.UserDao;
-import org.eurekaclinical.i2b2.entity.GroupEntity;
+import org.eurekaclinical.i2b2.dao.I2b2ProjectDao;
+import org.eurekaclinical.i2b2.dao.I2b2RoleDao;
 import org.eurekaclinical.i2b2.entity.I2b2DomainEntity;
 import org.eurekaclinical.i2b2.entity.I2b2ProjectEntity;
 import org.eurekaclinical.i2b2.entity.I2b2RoleEntity;
-import org.eurekaclinical.i2b2.entity.UserEntity;
-import org.eurekaclinical.i2b2.entity.UserTemplateEntity;
 import org.eurekaclinical.i2b2.integration.client.comm.I2b2User;
 import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
-import org.eurekaclinical.standardapis.dao.UserTemplateDao;
 import org.eurekaclinical.standardapis.exception.HttpStatusException;
 import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
 import org.jasig.cas.client.authentication.AttributePrincipal;
@@ -69,27 +64,27 @@ public class I2b2UserResource {
 	private final I2b2UserSetterFactory i2b2UserSetterFactory;
 	private final I2b2EurekaServicesProperties properties;
 	private final EurekaClinicalUserAgreementClient userAgreementClient;
-	private final UserTemplateDao<UserTemplateEntity> userTemplateDao;
 	private final I2b2DomainDao<I2b2DomainEntity> domainDao;
-	private final UserDao userDao;
+	private final I2b2ProjectDao<I2b2ProjectEntity> i2b2ProjectDao;
+	private final I2b2RoleDao<I2b2RoleEntity> i2b2RoleDao;
 
 	@Inject
 	public I2b2UserResource(I2b2ClientFactory i2b2ClientFactory,
 			I2b2UserSetterFactory i2b2UserSetterFactory,
 			I2b2EurekaServicesProperties properties,
 			EurekaClinicalUserAgreementClient userAgreementClient,
-			UserTemplateDao<UserTemplateEntity> inUserTemplateDao,
+			I2b2ProjectDao<I2b2ProjectEntity> inI2b2ProjectDao,
 			I2b2DomainDao<I2b2DomainEntity> inDomainDao,
-			UserDao inUserDao) {
+			I2b2RoleDao<I2b2RoleEntity> inI2b2RoleDao) {
 		this.i2b2ClientFactory = i2b2ClientFactory;
 		this.i2b2UserSetterFactory = i2b2UserSetterFactory;
 		this.properties = properties;
 		this.userAgreementClient = userAgreementClient;
-		this.userTemplateDao = inUserTemplateDao;
+		this.i2b2ProjectDao = inI2b2ProjectDao;
 		this.domainDao = inDomainDao;
-		this.userDao = inUserDao;
+		this.i2b2RoleDao = inI2b2RoleDao;
 	}
-
+	
 	@GET
 	@Path("/i2b2domains/{id}/i2b2users/{username}")
 	public I2b2User getByName(@PathParam("id") Long i2b2DomainId, @PathParam("username") String username, @Context HttpServletRequest req) {
@@ -108,12 +103,12 @@ public class I2b2UserResource {
 			throw new HttpStatusException(Response.Status.NOT_FOUND, ex);
 		}
 	}
-	
+
 	/**
 	 * Automatically creates user and role records in i2b2's PM cell, if the
-	 * user is authorized for eurekaclinical-i2b2-integration and is a member
-	 * of a group that has an associated i2b2 project.
-	 * 
+	 * user is authorized for eurekaclinical-i2b2-integration and is a member of
+	 * a group that has an associated i2b2 project.
+	 *
 	 * @param req the HTTP servlet request object.
 	 * @return the response object.
 	 */
@@ -127,40 +122,30 @@ public class I2b2UserResource {
 		Set<String> domainCache = new HashSet<>();
 		I2b2UserSetter userSetter = this.i2b2UserSetterFactory.getInstance();
 		try {
-			UserTemplateEntity userTemplate = null;
-			List<UserTemplateEntity> userTemplates = this.userTemplateDao.getAll();
-			UserEntity user = this.userDao.getByName(username);
-			TOP_LEVEL: for (UserTemplateEntity ute : userTemplates) {
-				for (GroupEntity ge : ute.getGroups()) {
-					if (user.getGroups().contains(ge)) {
-						userTemplate = ute;
-						break TOP_LEVEL;
+			boolean created = false;
+			if (this.properties.getUserAgreementUrl() == null
+					|| this.userAgreementClient.getUserAgreementStatus() != null) {
+				PasswordGenerator passwordGenerator = new PasswordGeneratorImpl();
+				for (I2b2ProjectEntity project : this.i2b2ProjectDao.getI2b2ProjectsForUser(username)) {
+					I2b2DomainEntity domain = project.getI2b2Domain();
+					I2b2AuthMetadata authMetadata = new I2b2AuthMetadata();
+					authMetadata.setRedirectHost(domain.getRedirectHost());
+					authMetadata.setProxyUrl(domain.getProxyUrl());
+					authMetadata.setDomain(domain.getName());
+					authMetadata.setUsername(domain.getAdminUsername());
+					authMetadata.setPassword(domain.getAdminPassword());
+					if (domainCache.add(domain.getName())) {
+						userSetter.setUser(authMetadata, username, passwordGenerator.generate(), fullName, email, false);
 					}
+					try (I2b2Client i2b2Client = this.i2b2ClientFactory.getInstance(authMetadata)) {
+						for (I2b2RoleEntity i2b2Role : this.i2b2RoleDao.getI2b2Roles(username, project.getId())) {
+							i2b2Client.setRole(username, project.getName(), i2b2Role.getName());
+						}
+					}
+					created = true;
 				}
 			}
-			if (userTemplate != null
-					&& (this.properties.getUserAgreementUrl() == null
-					|| this.userAgreementClient.getUserAgreementStatus() != null)) {
-				PasswordGenerator passwordGenerator = new PasswordGeneratorImpl();
-				for (GroupEntity group : userTemplate.getGroups()) {
-					for (I2b2ProjectEntity project : group.getI2b2Projects()) {
-						I2b2DomainEntity domain = project.getI2b2Domain();
-						I2b2AuthMetadata authMetadata = new I2b2AuthMetadata();
-						authMetadata.setRedirectHost(domain.getRedirectHost());
-						authMetadata.setProxyUrl(domain.getProxyUrl());
-						authMetadata.setDomain(domain.getName());
-						authMetadata.setUsername(domain.getAdminUsername());
-						authMetadata.setPassword(domain.getAdminPassword());
-						if (domainCache.add(domain.getName())) {
-							userSetter.setUser(authMetadata, username, passwordGenerator.generate(), fullName, email, false);
-						}
-						try (I2b2Client i2b2Client = this.i2b2ClientFactory.getInstance(authMetadata)) {
-							for (I2b2RoleEntity i2b2Role : group.getI2b2Roles()) {
-								i2b2Client.setRole(username, project.getName(), i2b2Role.getName());
-							}
-						}
-					}
-				}
+			if (created) {
 				return Response.created(URI.create("/" + username)).build();
 			} else {
 				throw new HttpStatusException(Response.Status.FORBIDDEN);

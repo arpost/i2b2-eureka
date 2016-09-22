@@ -20,6 +20,7 @@ package org.eurekaclinical.i2b2.dao;
  * #L%
  */
 
+import java.util.List;
 import org.eurekaclinical.i2b2.entity.I2b2RoleEntity;
 import org.eurekaclinical.standardapis.dao.DaoWithUniqueName;
 
@@ -32,5 +33,5 @@ import org.eurekaclinical.standardapis.dao.DaoWithUniqueName;
  *
  */
 public interface I2b2RoleDao<U extends I2b2RoleEntity> extends DaoWithUniqueName<U, Long> {
-
+	List<U> getI2b2Roles(String username, Long projectId);
 }

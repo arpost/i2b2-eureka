@@ -19,6 +19,7 @@ package org.eurekaclinical.i2b2.dao;
  * limitations under the License.
  * #L%
  */
+import java.util.List;
 import org.eurekaclinical.i2b2.entity.I2b2ProjectEntity;
 import org.eurekaclinical.standardapis.dao.Dao;
 
@@ -39,4 +40,7 @@ public interface I2b2ProjectDao<U extends I2b2ProjectEntity> extends Dao<U, Long
      * @return A {@link I2b2ProjectEntity} object with the given name.
      */
     U getI2b2ProjectByName(String name);
+	
+	List<U> getI2b2ProjectsForUser(String username);
+	
 }
