@@ -14,20 +14,5 @@
   
 	<name>i2b2 Send Patient Set Plugin</name>
 	<description>An i2b2 plugin for exporting patient data to CSV files.</description>
-  
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptors>
-						<descriptor>assembly/bin.xml</descriptor>
-						<descriptor>assembly/src.xml</descriptor>
-					</descriptors>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>
