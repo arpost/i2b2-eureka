@@ -110,4 +110,19 @@ public class AutoAuthCriteriaParserTest {
 		model.put("type", "student");
 		Assert.assertEquals(false, parser.parse("organization! == \"Hanford University\"", model));
 	}
+	
+	@Test
+	public void testNullVariableTrue2() throws CriteriaParseException {
+		Map<String, String> model = new HashMap<>();
+		model.put("type", "student");
+		Assert.assertEquals(true, parser.parse("organization! != \"Hanford University\"", model));
+	}
+	
+	@Test
+	public void testNullVariableFalse2() throws CriteriaParseException {
+		Map<String, String> model = new HashMap<>();
+		model.put("type", "student");
+		model.put("organization", "Hanford University");
+		Assert.assertEquals(false, parser.parse("organization! != \"Hanford University\"", model));
+	}
 }
