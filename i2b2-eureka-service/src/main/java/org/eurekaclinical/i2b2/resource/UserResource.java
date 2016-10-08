@@ -66,9 +66,9 @@ public class UserResource extends AbstractUserResource<I2b2IntegrationUser, User
 
 	private static final Logger LOGGER
 			= LoggerFactory.getLogger(UserResource.class);
-	
+
 	private static final AutoAuthCriteriaParser AUTO_AUTH_CRITERIA_PARSER = new AutoAuthCriteriaParser();
-	
+
 	private final RoleDao<RoleEntity> roleDao;
 	private final GroupDao<GroupEntity> groupDao;
 	private final UserTemplateDao<UserTemplateEntity> userTemplateDao;
@@ -127,6 +127,12 @@ public class UserResource extends AbstractUserResource<I2b2IntegrationUser, User
 							throw new HttpStatusException(Response.Status.FORBIDDEN);
 						}
 					} catch (CriteriaParseException ex) {
+						LOGGER.error("Unexpected error determining if user {} with attributes {} can be auto-authorized",
+								new Object[]{
+									req.getRemoteUser(),
+									attributes
+								});
+						LOGGER.error("Exception was {}", ex);
 						throw new HttpStatusException(Response.Status.INTERNAL_SERVER_ERROR);
 					}
 				} else {
