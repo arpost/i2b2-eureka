@@ -19,7 +19,6 @@ package org.eurekaclinical.i2b2.resource;
  * limitations under the License.
  * #L%
  */
-import freemarker.template.TemplateException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -96,5 +95,19 @@ public class AutoAuthCriteriaParserTest {
 	@Test
 	public void testNullCriteria() throws CriteriaParseException {
 		Assert.assertEquals(true, parser.parse(null, null));
+	}
+	
+	@Test
+	public void testNullVariableTrue() throws CriteriaParseException {
+		Map<String, String> model = new HashMap<>();
+		model.put("type", "student");
+		Assert.assertEquals(true, parser.parse("organization! == \"\"", model));
+	}
+	
+	@Test
+	public void testNullVariableFalse() throws CriteriaParseException {
+		Map<String, String> model = new HashMap<>();
+		model.put("type", "student");
+		Assert.assertEquals(false, parser.parse("organization! == \"Hanford University\"", model));
 	}
 }
