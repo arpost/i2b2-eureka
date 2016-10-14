@@ -24,7 +24,7 @@
 		<div id='Dem1Set-mainDiv'>
 			<div id="Dem1Set-TABS" class="yui-navset">
 				<ul class="yui-nav">
-					<li id="Dem1Set-TAB0" class="selected"><a href="#Dem1Set-TAB0"><em>Specify Data</em></a></li>
+					<li id="Dem1Set-TAB0" class="selected"><a href="#Dem1Set-TAB0"><em>Select Patient Set</em></a></li>
 					<li id="Dem1Set-TAB1"><a href="#Dem1Set-TAB1"><em>View Results</em></a></li>
 					<li id="Dem1Set-TAB2"><a href="#Dem1Set-TAB2"><em>Plugin Help</em></a></li>
 				</ul>
@@ -32,7 +32,7 @@
 					<div id="Dem1Set-Main">
 						<div class="Dem1Set-MainContent">
 							<div class="Dem1Set-MainContentPad">
-								<div>Drop a Patient Set into the input box below, and then click the "View Results" tab to retrieve demographic details for the selected patient set.</div>
+								<div>Drop a Patient Set into the input box below, select an action, and then click the "View Results" tab to perform the selected action on the selected patient set.</div>
 								<div class="droptrgtlbl">Patient Set:</div>
 								<div class="droptrgt SDX-PRS" id="Dem1Set-PRSDROP">Drop a Patient Set here</DIV>
 								<div>Select an action.</div>
@@ -43,7 +43,7 @@
 					</div>
 					<div  id="Dem1Set-Main">
 						<div class="Dem1Set-MainContent">
-							<div class="results-directions">Please return to the "Specify Data" tab and select a Patient Set.</div>
+							<div class="results-directions">Please return to the Select Patient Set tab and select a patient set.</div>
 							<div class="results-working" style="display:none;">Please wait while the request is being sent...</div>
 							<div class="results-finished" style="display:none;"></div>
 						</div>
@@ -51,16 +51,20 @@
 					<div  id="Dem1Set-Main">
 						<div class="Dem1Set-MainContent">
 							<div class="Dem1Set-MainContentPad">
-								<h1>Demographics (1 Patient Set) - Simple Counts</h1>
+								<h1>Patient Set Sender</h1>
 								<hr size="1" noshade>
 								<h2>Introduction</h2>
-								This plugin displays demographic information for a patient set across several different categories.
+								Performs an action on an i2b2 patient set.
 								<h2>Instructions</h2>
-								Navigate to the "Specify Data" tab. Then, drag and drop a Patient Set onto the input box. Finally, click the "View Results" tab to view the demographic details.
+								<ol>
+									<li>Navigate to the Select Patient Set tab.
+									<li>Drag and drop a patient set from Previous Queries or the Workplace onto the input box.
+									<li>Click the View Results tab to perform the selected action on the selected patient set.
+								</ol>
 								<h2>About Us</h2>
-								This plugin was created by Nick Benik and Griffin Weber, MD, PhD.
+								This plugin was created by the Eureka! Clinical Analytics team at Emory University, Atlanta, GA.
 								<h2>Terms of Use</h2>
-								This plugin is distributed with the i2b2 web client framework and may be used free of charge.
+								This plugin is distributed as open source under the Apache License, Version 2.0.
 							</div>
 						</div>
 					</div>
