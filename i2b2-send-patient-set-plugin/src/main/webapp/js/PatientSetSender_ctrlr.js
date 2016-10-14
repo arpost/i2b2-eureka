@@ -44,29 +44,40 @@ i2b2.PatientSetSender.Init = function (loadedDiv) {
 	$$('DIV#Dem1Set-TABS DIV.Dem1Set-MainContent')[0].style.height = z;
 	$$('DIV#Dem1Set-TABS DIV.Dem1Set-MainContent')[1].style.height = z;
 	$$('DIV#Dem1Set-TABS DIV.Dem1Set-MainContent')[2].style.height = z;
-
-	new Ajax.Request(i2b2.PatientSetSender.EUREKA_SERVICES_URL + '/proxy-resource/destinations?type=PATIENT_SET_EXTRACTOR', {
-		method: 'get',
-		contentType: 'application/json',
-		asynchronous: false,
+	
+	i2b2.PM.getEurekaClinicalSession(i2b2.PatientSetSender.EUREKA_SERVICES_URL, {
 		onSuccess: function (response) {
-			var destinations = JSON.parse(response.responseText);
-			var s = "<select>";
-			for (var i = 0; i < destinations.length; i++) {
-				s += '<option value="' + destinations[i].name + '">' + destinations[i].name + '</option>';
-			}
-			s += "</select>"
-			$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV#Dem1Set-SelectDest")[0].innerHTML = s;
+			new Ajax.Request(i2b2.PatientSetSender.EUREKA_SERVICES_URL + '/proxy-resource/destinations?type=PATIENT_SET_EXTRACTOR', {
+				method: 'get',
+				contentType: 'application/json',
+				asynchronous: false,
+				onSuccess: function (response) {
+					var destinations = JSON.parse(response.responseText);
+					var s = "<select>";
+					for (var i = 0; i < destinations.length; i++) {
+						s += '<option value="' + destinations[i].name + '">' + destinations[i].name + '</option>';
+					}
+					s += "</select>"
+					$$("DIV#Dem1Set-mainDiv DIV#Dem1Set-TABS DIV#Dem1Set-SelectDest")[0].innerHTML = s;
+				},
+				onFailure: function (response) {
+					alert('The results from the server could not be understood.  Press F12 for more information.');
+					console.error("Bad Results from Cell Communicator: ", response);
+				},
+				onComplete: function (response) {
+					new Ajax.Request(i2b2.PatientSetSender.EUREKA_SERVICES_URL + '/destroy-session', {
+						method: 'get',
+						onComplete: function (response) {
+						}
+					});
+				}
+			});
 		},
 		onFailure: function (response) {
 			alert('The results from the server could not be understood.  Press F12 for more information.');
 			console.error("Bad Results from Cell Communicator: ", response);
-		},
-		onComplete: function (response) {
-			//i2b2.PatientSetSender.model.dirtyResultsData = false;
 		}
 	});
-
 };
 
 i2b2.PatientSetSender.Unload = function () {
@@ -96,7 +107,7 @@ i2b2.PatientSetSender.getResults = function () {
 		
 		window.name = "opener";
 		
-		i2b2.PatientSetSender.eurekaServicesURL = i2b2.PatientSetSender.SERVICE_URL + '/api/protected/patientset';
+		i2b2.PatientSetSender.eurekaServicesURL = i2b2.PatientSetSender.SERVICE_URL + '/proxy-resource/patientset';
 		i2b2.PatientSetSender.selectedReceiverUrl = i2b2.PatientSetSender.RECEIVER_SEND_URL;
 		
 		window.open(i2b2.PatientSetSender.cfg.config.assetDir + 'patient_set_sender.html');
