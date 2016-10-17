@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import org.eurekaclinical.common.comm.clients.ClientException;
-import org.eurekaclinical.eureka.client.EurekaClient;
+import org.eurekaclinical.eureka.client.EurekaProxyClient;
 import org.eurekaclinical.eureka.client.comm.DefaultSourceConfigOption;
 import org.eurekaclinical.eureka.client.comm.Destination;
 import org.eurekaclinical.eureka.client.comm.Job;
@@ -58,11 +58,11 @@ public class PatientSetResource {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PatientSetResource.class);
 
-	private final EurekaClient eurekaClient;
+	private final EurekaProxyClient eurekaClient;
 	private final I2b2EurekaServicesProperties properties;
 
 	@Inject
-	public PatientSetResource(EurekaClient inEurekaClient, I2b2EurekaServicesProperties inProperties) {
+	public PatientSetResource(EurekaProxyClient inEurekaClient, I2b2EurekaServicesProperties inProperties) {
 		this.eurekaClient = inEurekaClient;
 		this.properties = inProperties;
 	}

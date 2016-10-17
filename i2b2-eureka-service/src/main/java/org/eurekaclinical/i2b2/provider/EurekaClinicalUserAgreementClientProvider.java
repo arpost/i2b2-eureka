@@ -27,27 +27,27 @@ import com.google.inject.Provider;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
-import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
 /**
  * 
  * @author Andrew Post
  */
 @Singleton
-public class EurekaClinicalUserAgreementClientProvider implements Provider<EurekaClinicalUserAgreementClient> {
+public class EurekaClinicalUserAgreementClientProvider implements Provider<EurekaClinicalUserAgreementProxyClient> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EurekaClinicalUserAgreementClientProvider.class);
-	private final EurekaClinicalUserAgreementClient client;
+	private final EurekaClinicalUserAgreementProxyClient client;
 
 	@Inject
 	public EurekaClinicalUserAgreementClientProvider(I2b2EurekaServicesProperties inProperties) {
 		LOGGER.debug("service url = {}", inProperties.getEurekaServiceUrl());
-		this.client = new EurekaClinicalUserAgreementClient(inProperties.getUserAgreementServiceUrl());
+		this.client = new EurekaClinicalUserAgreementProxyClient(inProperties.getUserAgreementServiceUrl());
 	}
 
 	@Override
-	public EurekaClinicalUserAgreementClient get() {
+	public EurekaClinicalUserAgreementProxyClient get() {
 		return this.client;
 	}
 
