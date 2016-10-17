@@ -22,7 +22,7 @@ package org.eurekaclinical.i2b2.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
-import org.eurekaclinical.eureka.client.EurekaClient;
+import org.eurekaclinical.eureka.client.EurekaProxyClient;
 import org.eurekaclinical.i2b2.provider.EurekaClientProvider;
 import org.eurekaclinical.i2b2.dao.I2b2DomainDao;
 import org.eurekaclinical.i2b2.dao.I2b2ProjectDao;
@@ -50,7 +50,7 @@ import org.eurekaclinical.i2b2.client.I2b2ClientFactoryImpl;
 import org.eurekaclinical.i2b2.client.I2b2UserSetterFactory;
 import org.eurekaclinical.i2b2.client.I2b2UserSetterFactoryImpl;
 import org.eurekaclinical.i2b2.provider.EurekaClinicalUserAgreementClientProvider;
-import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
+import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementProxyClient;
 
 /**
  * Configuration for Guice interface bindings.
@@ -64,8 +64,8 @@ public class GuiceConfigModule extends AbstractModule {
 	protected void configure() {
 		bind(I2b2ClientFactory.class).to(I2b2ClientFactoryImpl.class);
 		bind(I2b2UserSetterFactory.class).to(I2b2UserSetterFactoryImpl.class);
-		bind(EurekaClient.class).toProvider(EurekaClientProvider.class);
-		bind(EurekaClinicalUserAgreementClient.class).toProvider(EurekaClinicalUserAgreementClientProvider.class);
+		bind(EurekaProxyClient.class).toProvider(EurekaClientProvider.class);
+		bind(EurekaClinicalUserAgreementProxyClient.class).toProvider(EurekaClinicalUserAgreementClientProvider.class);
 		bind(new TypeLiteral<UserDao<UserEntity>>() {}).to(JpaUserDao.class);
 		bind(new TypeLiteral<UserTemplateDao<UserTemplateEntity>>() {}).to(JpaUserTemplateDao.class);
         bind(new TypeLiteral<UserDao<? extends org.eurekaclinical.standardapis.entity.UserEntity<? extends org.eurekaclinical.standardapis.entity.RoleEntity>>>() {}).to(JpaUserDao.class);

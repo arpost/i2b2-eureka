@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Provider;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.eurekaclinical.eureka.client.EurekaClient;
+import org.eurekaclinical.eureka.client.EurekaProxyClient;
 import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
 
 /**
@@ -34,20 +34,20 @@ import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
  * @author Andrew Post
  */
 @Singleton
-public class EurekaClientProvider implements Provider<EurekaClient> {
+public class EurekaClientProvider implements Provider<EurekaProxyClient> {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(EurekaClientProvider.class);
-	private final EurekaClient client;
+	private final EurekaProxyClient client;
 
 	@Inject
 	public EurekaClientProvider(I2b2EurekaServicesProperties inProperties) {
 		LOGGER.debug("service url = {}", inProperties.getEurekaServiceUrl());
-		this.client = new EurekaClient(inProperties.getEurekaServiceUrl());
+		this.client = new EurekaProxyClient(inProperties.getEurekaServiceUrl());
 	}
 
 	@Override
-	public EurekaClient get() {
+	public EurekaProxyClient get() {
 		return this.client;
 	}
 
