@@ -39,16 +39,16 @@ public class I2b2EurekaServicesProperties extends CasEurekaClinicalProperties {
 		return this.getValue("eurekaclinical.i2b2service.callbackserver", "https://localhost:8443");
 	}
 	
-	public String getServiceUrl() {
-		return this.getValue("eureka.webapp.url", "https://localhost/eureka-webapp");
+	public String getEurekaServiceUrl() {
+		return this.getValue("eureka.services.url", "https://localhost/eureka-services");
 	}
 	
 	public String getSourceConfigId() {
 		return this.getValue("eurekaclinical.i2b2service.sourceConfigId", "i2b2 Eureka Service");
 	}
 	
-	public String getUserAgreementUrl() {
-		return this.getValue("eurekaclinical.useragreement.url");
+	public String getUserAgreementServiceUrl() {
+		return this.getValue("eurekaclinical.useragreementservice.url");
 	}
 	
 	public String getCasEmailAttribute() {
