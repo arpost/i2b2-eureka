@@ -50,6 +50,7 @@ import org.eurekaclinical.i2b2.integration.client.comm.I2b2User;
 import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
 import org.eurekaclinical.standardapis.exception.HttpStatusException;
 import org.eurekaclinical.useragreement.client.EurekaClinicalUserAgreementClient;
+import org.eurekaclinical.useragreement.client.comm.UserAgreementStatus;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 
 /**
@@ -103,7 +104,7 @@ public class I2b2UserResource {
 			throw new HttpStatusException(Response.Status.NOT_FOUND, ex);
 		}
 	}
-
+	
 	/**
 	 * Automatically creates user and role records in i2b2's PM cell, if the
 	 * user is authorized for eurekaclinical-i2b2-integration and is a member of
@@ -123,7 +124,7 @@ public class I2b2UserResource {
 		I2b2UserSetter userSetter = this.i2b2UserSetterFactory.getInstance();
 		try {
 			boolean created = false;
-			if (this.properties.getUserAgreementUrl() == null
+			if (this.properties.getUserAgreementServiceUrl() == null
 					|| this.userAgreementClient.getUserAgreementStatus() != null) {
 				PasswordGenerator passwordGenerator = new PasswordGeneratorImpl();
 				for (I2b2ProjectEntity project : this.i2b2ProjectDao.getI2b2ProjectsForUser(username)) {
