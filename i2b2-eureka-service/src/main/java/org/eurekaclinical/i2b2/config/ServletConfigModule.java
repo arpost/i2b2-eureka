@@ -20,6 +20,7 @@ package org.eurekaclinical.i2b2.config;
  * #L%
  */
 
+import java.util.Map;
 import org.eurekaclinical.common.config.AbstractAuthorizingJerseyServletModuleWithPersist;
 import org.eurekaclinical.i2b2.props.I2b2EurekaServicesProperties;
 
@@ -35,6 +36,14 @@ public class ServletConfigModule extends AbstractAuthorizingJerseyServletModuleW
 	
 	public ServletConfigModule(I2b2EurekaServicesProperties inProperties) {
 		super(inProperties, PACKAGE_NAMES);
+	}
+	
+	@Override
+	public Map<String, String> getCasValidationFilterInitParams() {
+		Map<String, String> params = super.getCasValidationFilterInitParams();
+		params.put("proxyCallbackUrl", getCasProxyCallbackUrl());
+        params.put("proxyReceptorUrl", getCasProxyCallbackPath());
+		return params;
 	}
 	
 }

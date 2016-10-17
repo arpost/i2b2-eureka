@@ -42,8 +42,8 @@ public class EurekaClinicalUserAgreementClientProvider implements Provider<Eurek
 
 	@Inject
 	public EurekaClinicalUserAgreementClientProvider(I2b2EurekaServicesProperties inProperties) {
-		LOGGER.debug("service url = {}", inProperties.getServiceUrl());
-		this.client = new EurekaClinicalUserAgreementClient(inProperties.getUserAgreementUrl());
+		LOGGER.debug("service url = {}", inProperties.getEurekaServiceUrl());
+		this.client = new EurekaClinicalUserAgreementClient(inProperties.getUserAgreementServiceUrl());
 	}
 
 	@Override

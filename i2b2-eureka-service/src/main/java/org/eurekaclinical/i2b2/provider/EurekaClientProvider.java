@@ -42,8 +42,8 @@ public class EurekaClientProvider implements Provider<EurekaClient> {
 
 	@Inject
 	public EurekaClientProvider(I2b2EurekaServicesProperties inProperties) {
-		LOGGER.debug("service url = {}", inProperties.getServiceUrl());
-		this.client = new EurekaClient(inProperties.getServiceUrl());
+		LOGGER.debug("service url = {}", inProperties.getEurekaServiceUrl());
+		this.client = new EurekaClient(inProperties.getEurekaServiceUrl());
 	}
 
 	@Override
